@@ -1,0 +1,15 @@
+{
+	"extends": "@tsconfig/svelte/tsconfig.json",
+	"include": ["src/**/*", "src/node_modules/**/*"],
+	"exclude": ["node_modules/*", "__sapper__/*", "public/*"],
+
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"strictNullChecks": true,
+		"resolveJsonModule": true,
+		"types": ["svelte", "node"],
+		"lib": ["DOM", "ES2017", "WebWorker", "ES2021.String"],
+		"module": "ESNext",
+		"forceConsistentCasingInFileNames": false
+	}
+}

@@ -1,0 +1,44 @@
+{
+	"name": "svelte-app",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"watch:dev": "run-p watch:css dev:*",
+		"watch:css": "postcss src/assets/styles.pcss -o public/global.css -w",
+		"dev:css": "postcss src/assets/styles.pcss -o public/global.css",
+		"dev": "run-p dev:*",
+		"dev:rollup": "rollup -c -w",
+		"build": "rollup -c",
+		"start": "sirv public --no-clear",
+		"check": "svelte-check --tsconfig ./tsconfig.json"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^17.0.0",
+		"@rollup/plugin-node-resolve": "^11.0.0",
+		"@rollup/plugin-typescript": "^8.0.0",
+		"@tsconfig/svelte": "^2.0.0",
+		"autoprefixer": "^10.4.7",
+		"cssnano": "^5.1.11",
+		"npm-run-all": "^4.1.5",
+		"postcss": "^8.4.14",
+		"postcss-cli": "^9.1.0",
+		"postcss-import": "^14.1.0",
+		"postcss-load-config": "^4.0.1",
+		"postcss-loader": "^7.0.0",
+		"postcss-preset-env": "^7.7.1",
+		"rollup": "^2.3.4",
+		"rollup-plugin-css-only": "^3.1.0",
+		"rollup-plugin-livereload": "^2.0.0",
+		"rollup-plugin-svelte": "^7.0.0",
+		"rollup-plugin-terser": "^7.0.0",
+		"svelte": "^3.0.0",
+		"svelte-check": "^2.0.0",
+		"svelte-preprocess": "^4.0.0",
+		"tailwindcss": "^3.1.2",
+		"tslib": "^2.0.0",
+		"typescript": "^4.0.0"
+	},
+	"dependencies": {
+		"sirv-cli": "^2.0.0"
+	}
+}
