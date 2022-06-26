@@ -1,0 +1,45 @@
+.btn {
+  @apply text-base font-medium leading-5 rounded-buttonRadius focus:outline-none;
+}
+
+.btn-normal {
+  @apply border-3  px-btnNormalX py-btnNormalY;
+}
+
+.btn-small {
+  @apply border-2 px-btnSmallX py-btnSmallY;
+}
+
+.btn-medium {
+  @apply border-2 px-btnMediumX py-btnSmallY;
+}
+
+.btn-primary-filled {
+  @apply text-white border-transparent bg-yellow-primary hover:bg-transparent hover:text-yellow-primary hover:border-yellow-primary;
+}
+
+.btn-primary-outlined {
+  @apply bg-white text-yellow-primary border-yellow-primary hover:border-transparent hover:bg-yellow-primary hover:text-white;
+}
+
+.btn-secondary-filled {
+}
+
+.btn-secondary-outlined {
+}
+
+.btn-dark-filled {
+  @apply text-white border-transparent bg-black-primary hover:bg-transparent hover:text-black-primary hover:border-black-primary;
+}
+
+.btn-dark-outlined {
+  @apply bg-white text-black-primary border-black-primary hover:border-transparent hover:bg-black-primary hover:text-white;
+}
+
+.btn-transparent-outlined {
+  @apply text-white bg-transparent border-white hover:bg-white hover:text-black-primary;
+}
+
+.btn-gray-filled {
+  @apply border-transparent text-black-primary bg-gray-secondary;
+}
