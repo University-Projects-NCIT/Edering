@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Button from 'components/Buttons/Button.svelte';
+  import Button from './components/buttons/Button.svelte';
 </script>
 
 <Button variant="transparent" label="Order" />
