@@ -8,6 +8,7 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import alias from '@rollup/plugin-alias';
 import css from 'rollup-plugin-css-only';
+import rollupPluginInjectProcessEnv from 'rollup-plugin-inject-process-env';
 
 const dir = projectDir => path.resolve(__dirname, projectDir);
 const production = !process.env.ROLLUP_WATCH;
@@ -25,6 +26,24 @@ const aliases = alias({
     { find: 'components', replacement: dir('src/components') },
   ],
 });
+
+const setProcessEnv = () => {
+  return rollupPluginInjectProcessEnv(
+    {
+      NODE_ENV: process.env.NODE_ENV,
+      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+      FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+      FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+      FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
+      FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
+      FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
+      FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
+    },
+    {
+      exclude: ['**/*.css'],
+    }
+  );
+};
 
 function serve() {
   let server;
@@ -55,9 +74,9 @@ export default {
   input: 'src/main.ts',
   output: {
     sourcemap: true,
-    format: 'iife',
+    format: 'esm',
     name: 'app',
-    file: 'public/build/bundle.js',
+    dir: 'public/build',
   },
   plugins: [
     aliases,
@@ -86,6 +105,7 @@ export default {
       sourceMap: !production,
       inlineSources: !production,
     }),
+    setProcessEnv(),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
