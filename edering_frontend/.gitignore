@@ -3,3 +3,5 @@
 /public/global.css
 
 .DS_Store
+.env
+.routify

@@ -27,6 +27,7 @@
     },
     "svelte3/typescript": true
   },
+  "@typescript-eslint/no-var-requires": 0,
   "rules": {
     "strict": "error",
     "no-shadow": "off",
