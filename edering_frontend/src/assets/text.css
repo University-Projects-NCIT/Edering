@@ -1,0 +1,11 @@
+.body-normal {
+  @apply text-xs font-normal;
+}
+
+.body-small {
+  @apply text-xs font-normal;
+}
+
+.body-medium {
+  @apply text-base font-medium;
+}
