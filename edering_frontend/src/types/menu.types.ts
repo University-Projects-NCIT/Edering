@@ -3,4 +3,5 @@ export interface IMenu {
   category?: string;
   name?: string;
   price?: string;
+  image_uri_id?: string;
 }

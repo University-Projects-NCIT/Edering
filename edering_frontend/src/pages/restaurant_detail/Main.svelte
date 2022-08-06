@@ -54,17 +54,21 @@
   <!-- detail container -->
   <Box className="px-2">
     <!-- //topnav -->
-    <Box className="mt-2" flow="horizontal" justify="center">
+    <Box className="mt-2">
       <TopNav {navItems} />
     </Box>
     <!-- //search bar -->
-    <Box className="mt-2">
+    <Box className="mt-3">
       <Input placeholder="Search foods..." />
     </Box>
 
-    <!-- <Box className="mt-2 overflow-x-auto overflow-auto w-full">
-      <TopNav navType="foodCategory" {foodCategories} />
-    </Box> -->
+    <Box className="flex mt-2">
+      <h3 class="text-base font-bold">Eatme</h3>
+      <Box
+        className="rounded-full bg-yellow-primary mt-1"
+        style="width: 0.4rem; height: 0.4rem;"
+      />
+    </Box>
 
     <Box
       flow="horizontal"
