@@ -8,7 +8,7 @@
   export let foodCategories: IFoodCategory[] | undefined = undefined;
 </script>
 
-<Box flow="horizontal" align="center" className="space-x-2">
+<Box flow="horizontal" align="center" justify="between">
   {#if navType === 'top'}
     {#each navItems ?? [] as item}
       <Box
