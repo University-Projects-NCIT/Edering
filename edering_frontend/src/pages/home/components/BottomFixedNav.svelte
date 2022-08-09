@@ -31,7 +31,9 @@
     <a href="/">
       <Box flow="vertical" align="center">
         <img class="w-4" src={item.icon} alt="" />
-        <p style="font-size: 0.6rem; line-height: 0.7rem">{item.name}</p>
+        <p class="mt-1" style="font-size: 0.6rem; line-height: 0.7rem">
+          {item.name}
+        </p>
       </Box>
     </a>
   {/each}
