@@ -1,6 +1,14 @@
 <script lang="ts">
   import Box from 'components/layouts/Box.svelte';
+  import { cartStore } from 'store/cart/cart.store';
   import type { IMenu } from 'types/menu.types';
+  import IncDecItemQuantity from './components/IncDecItemQuantity.svelte';
+
+  let isItemAddedToCart = false;
+  $: console.log('count', $cartStore.itemQty);
+
+  $: itemQty = $cartStore.itemQty;
+  $: itemQty ? (isItemAddedToCart = true) : (isItemAddedToCart = false);
 
   let menu: IMenu[] = [
     {
@@ -69,10 +77,27 @@
 </script>
 
 <Box className="pt-5 px-2 space-y-2 pb-11">
-  <h1 class="text-base font-bold text-center">Momo</h1>
+  <Box flow="horizontal" align="center">
+    <h1
+      class="text-base text-black-primary font-bold w-full flex justify-center"
+    >
+      Momo
+    </h1>
+    <Box
+      className="bg-gray-primary p-2 rounded-full hover:cursor-pointer relative"
+    >
+      <img class="w-4" src="/icons/cart.svg" alt="" />
+      {#if isItemAddedToCart}
+        <span
+          class="bg-yellow-primary rounded-full absolute top-2 left-"
+          style="width: 0.3rem; height: 0.3rem; top: 0.4rem; left: 1rem"
+        />
+      {/if}
+    </Box>
+  </Box>
   <!-- chicken -->
   <Box className="">
-    <h3 class="text-sm font-bold">Chicken</h3>
+    <h3 class="text-sm font-bold text-black-primary">Chicken</h3>
     <!-- chicken items card container -->
     <Box className="space-y-2">
       {#each data['chicken'] ?? [] as item}
@@ -83,7 +108,7 @@
             alt=""
           />
           <Box className="px-3 space-y-2 flex-1">
-            <h4 class="text-xs font-medium">
+            <h4 class="text-xs text-black-primary font-medium">
               {item?.name}
             </h4>
             <Box flow="horizontal" align="center" justify="between">
@@ -91,11 +116,7 @@
                 {item?.price}
               </p>
               <Box>
-                <p
-                  class="bg-yellow-primary text-white leading-4 w-4 text-center rounded-full"
-                >
-                  +
-                </p>
+                <IncDecItemQuantity {item} />
               </Box>
             </Box>
           </Box>
@@ -105,7 +126,7 @@
   </Box>
   <!-- veg -->
   <Box className="">
-    <h3 class="text-sm font-bold">Veg</h3>
+    <h3 class="text-sm text-black-primary font-bold">Veg</h3>
     <Box className="space-y-2">
       {#each data['veg'] ?? [] as item}
         <Box flow="horizontal" className="bg-gray-primary rounded-3xl p-4 ">
@@ -115,7 +136,7 @@
             alt=""
           />
           <Box className="px-3 space-y-2 flex-1">
-            <h4 class="text-xs font-medium">
+            <h4 class="text-xs text-black-primary font-medium">
               {item?.name}
             </h4>
             <Box flow="horizontal" align="center" justify="between">
@@ -123,11 +144,7 @@
                 {item?.price}
               </p>
               <Box>
-                <p
-                  class="bg-yellow-primary text-white leading-4 w-4 text-center rounded-full"
-                >
-                  +
-                </p>
+                <IncDecItemQuantity {item} />
               </Box>
             </Box>
           </Box>
