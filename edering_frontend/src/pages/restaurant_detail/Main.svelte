@@ -63,7 +63,7 @@
     </Box>
 
     <Box className="flex mt-2">
-      <h3 class="text-base font-bold">Eatme</h3>
+      <h3 class="text-base text-black-primary font-bold">Eatme</h3>
       <Box
         className="rounded-full bg-yellow-primary mt-1"
         style="width: 0.4rem; height: 0.4rem;"
@@ -78,13 +78,17 @@
     >
       <!-- food categories list -->
       {#each foodCategories as category}
-        <Box className="bg-gray-primary rounded-3xl p-4 text-center">
+        <Box
+          className="bg-gray-primary rounded-3xl p-4 text-center hover:cursor-pointer food-category"
+        >
           <img
             class="w-20 h-16 rounded-2xl"
             src={category?.image_uri_id ?? ''}
             alt=""
           />
-          <p class="text-xs font-medium">{category?.c_name}</p>
+          <p class="text-xs text-black-primary font-medium">
+            {category?.c_name}
+          </p>
         </Box>
       {/each}
     </Box>
@@ -94,5 +98,9 @@
 <style>
   .banner-img {
     aspect-ratio: 2/1;
+  }
+
+  :global(.food-category:hover p) {
+    color: #ffa800;
   }
 </style>
