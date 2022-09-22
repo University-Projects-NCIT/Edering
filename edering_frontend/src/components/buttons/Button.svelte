@@ -30,5 +30,6 @@
     {disabled}
   >
     {label}
+    <slot/>
   </button>
 {/if}

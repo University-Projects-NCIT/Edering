@@ -2,7 +2,7 @@
   import Input from 'components/input_components/Input.svelte';
   import Box from 'components/layouts/Box.svelte';
   import type { IFoodCategory } from 'types/foodCategory.types';
-  import TopNav from './components/TopNav.svelte';
+  import TopNav from '../pages/restaurant_detail/components/TopNav.svelte';
 
   const foodCategories: IFoodCategory[] = [
     {

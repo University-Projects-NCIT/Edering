@@ -41,6 +41,12 @@ module.exports = {
           secondary: '#DDDDDD',
           tertiary: '#AAAAAA',
         },
+        color1: {
+          green1: '#27AE61',
+          blueText: '#2975AA',
+          skyBlue: '#4184B2',
+          orange1: '#FFA800',
+        },
       },
     },
   },

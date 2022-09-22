@@ -27,7 +27,7 @@
 
 <Box
   flow="horizontal"
-  className="bg-gray-primary py-1"
+  className="bg-gray-primary pt-2 pb-2"
   align="center"
   justify="around"
 >
@@ -39,6 +39,7 @@
           {item.name}
         </p>
       </Box>
-    </a>
+      </a>
+    </div>
   {/each}
 </Box>
