@@ -39,7 +39,6 @@
           {item.name}
         </p>
       </Box>
-      </a>
-    </div>
+    </a>
   {/each}
 </Box>

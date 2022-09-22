@@ -1,5 +1,6 @@
 <script lang="ts">
-  import Box from 'components/layouts/Box.svelte';
+  import Box from 'components/layouts/Box.svelte';'
+
   export let userType: "Provider" | "Customer" = "Customer";
 
   let selectedUser = "Provider"
@@ -31,10 +32,11 @@
       <div class="w-40 h-40 bg-[url('/icons/placeholder.png')] bg-cover"/>
     </div>
 
-    <div class="mt-4 content-center border-2 border-color1-green1
+    <div class="mt-4 content-center border-2 border-black-primary
      flex items-center justify-center h-10 max-w-md mx-8
      rounded-full text-center">
-        <p class="text-color1-green1">Login with google</p>
+        <img class="w-5 mr-4" src={'/icons/google.svg'} alt=""/>
+        <p class="text-black-primary">Login with google</p>
     </div>
 
   </div>
