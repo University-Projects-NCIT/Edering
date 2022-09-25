@@ -1,1 +1,1 @@
-export * from './envData';
+export { default as envData } from './envData';
