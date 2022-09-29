@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
   import Box from 'components/layouts/Box.svelte';
+  import type { HTMLInput } from 'types/input.types';
   export let placeholder = '';
+  export let handleInput: (e: HTMLInput) => void = () => {};
 </script>
 
 <Box
@@ -9,6 +11,7 @@
   className="bg-gray-primary rounded-full text-xs border-2 focus-within:border-yellow-primary focus:outline-none focus:ring-transparent border-gray-primary"
 >
   <input
+    on:input={handleInput}
     class="bg-gray-primary text-black-primary px-3 py-1 w-full rounded-full border-0 focus:placeholder-transparent focus:outline-none focus:ring-transparent"
     type="text"
     id="search-bar"
