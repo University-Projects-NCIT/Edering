@@ -8,7 +8,7 @@
     "lib": ["DOM", "ES2017", "WebWorker", "ES2021.String"],
     "module": "ESNext",
     "forceConsistentCasingInFileNames": false,
-    "noUnusedLocals": true
+    "noUnusedLocals": false
   },
   "include": ["src/**/*", "src/node_modules/**/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
