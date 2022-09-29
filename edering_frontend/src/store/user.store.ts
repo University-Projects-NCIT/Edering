@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import type { User } from 'types';
+import type { IUser } from 'types';
 
-let userState: User = {
+let userState: IUser = {
   id: '',
   type: '', // provider eg Hotels , customer eg Customer in hotel
   name: '',

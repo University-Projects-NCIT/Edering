@@ -3,7 +3,7 @@
   import Box from 'components/layouts/Box.svelte';
   import { authState } from 'rxfire/auth';
   import { auth, googleProvider } from 'config/conn_firebase';
-  import type { User } from 'types';
+  import type { IUser } from 'types';
   import { user_store } from 'store';
   import { signInWithPopup } from 'firebase/auth';
 
@@ -11,8 +11,8 @@
 
   let _selectedUser = 'Provider';
 
-  let userProfile: User;
-  const userStore = user_store.subscribe((value: User) => {
+  let userProfile: IUser;
+  const userStore = user_store.subscribe((value: IUser) => {
     userProfile = value;
     console.log(userProfile);
   });

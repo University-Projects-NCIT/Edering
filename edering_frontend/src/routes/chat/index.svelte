@@ -1,17 +1,16 @@
 <script lang="ts">
   import { db } from 'config/conn_firebase';
   import { user_store } from 'store';
-  import type { User } from 'types';
-  import type Message from 'types/message.types';
+  import type { IMessage, IUser } from 'types';
 
-  let user: User;
-  const userStore = user_store.subscribe((value: User) => {
+  let user: IUser;
+  const userStore = user_store.subscribe((value: IUser) => {
     user = value;
     console.log(user);
   });
 
   let msg = '';
-  let result: Array<Message> = [];
+  let result: IMessage[] = [];
 
   const hotelId = 'hotelid2';
   const customerId = 'customerid1';
@@ -31,19 +30,19 @@
   db.collection('messages')
     .orderBy('createdAt', 'asc')
     .onSnapshot(snapData => {
-      let newData: Array<Message> = [];
+      let newData: IMessage[] = [];
 
       snapData.forEach(result => {
         console.log('UID check: ', result.id);
 
-        const msg: Message = {
+        const msg = {
           id: result.id,
           createdAt: result.data().createdAt,
           msg: result.data().msg,
           sender: result.data().sender,
           receiver: result.data().receiver,
           type: result.data().type,
-        };
+        } as IMessage;
         newData = [...newData, msg];
       });
       result = newData;

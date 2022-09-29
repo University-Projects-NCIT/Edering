@@ -1,4 +1,4 @@
-export default interface Message {
+export interface IMessage {
   id: String;
   msg: String;
   createdAt: Number;
