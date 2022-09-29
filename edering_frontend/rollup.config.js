@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+import replace from '@rollup/plugin-replace';
 import path from 'path';
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
@@ -8,7 +10,6 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import alias from '@rollup/plugin-alias';
 import css from 'rollup-plugin-css-only';
-import rollupPluginInjectProcessEnv from 'rollup-plugin-inject-process-env';
 
 const dir = projectDir => path.resolve(__dirname, projectDir);
 const production = !process.env.ROLLUP_WATCH;
@@ -27,23 +28,27 @@ const aliases = alias({
   ],
 });
 
-const setProcessEnv = () => {
-  return rollupPluginInjectProcessEnv(
-    {
-      NODE_ENV: process.env.NODE_ENV,
-      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-      FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
-      FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
-      FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
-      FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
-      FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
-      FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
-    },
-    {
-      exclude: ['**/*.css'],
-    }
-  );
-};
+const configToReplace = {};
+for (const [key, v] of Object.entries(config().parsed)) {
+  configToReplace[`process.env.${key}`] = `'${v}'`;
+}
+
+// const setProcessEnv = () => {
+//   return injectProcessEnv(
+//     {
+//       FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+//       FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+//       FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+//       FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
+//       FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
+//       FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
+//       FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
+//     },
+//     {
+//       exclude: ['**/*.css'],
+//     }
+//   );
+// };
 
 function serve() {
   let server;
@@ -79,6 +84,11 @@ export default {
     dir: 'public/build',
   },
   plugins: [
+    replace({
+      include: ['src/**/*.ts', 'src/**/*.svelte'],
+      preventAssignment: true,
+      values: configToReplace,
+    }),
     aliases,
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),
@@ -105,7 +115,7 @@ export default {
       sourceMap: !production,
       inlineSources: !production,
     }),
-    setProcessEnv(),
+    // setProcessEnv(),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated

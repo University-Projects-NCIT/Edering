@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { url } from '@roxi/routify';
   import Box from 'components/layouts/Box.svelte';
 
   const menuItems = [
@@ -32,7 +33,7 @@
   justify="around"
 >
   {#each menuItems as item}
-    <a href={item.route}>
+    <a href={$url(`${item.route}`)}>
       <Box flow="vertical" align="center">
         <img class="w-4" src={item.icon} alt="" />
         <p class="mt-1" style="font-size: 0.6rem; line-height: 0.7rem">

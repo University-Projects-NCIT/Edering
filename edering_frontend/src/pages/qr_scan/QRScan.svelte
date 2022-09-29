@@ -1,5 +1,4 @@
 <script>
-  import QRScanner from 'qr-scanner';
   import Box from 'components/layouts/Box.svelte';
 
   const prevScanInfo = [
@@ -19,7 +18,6 @@
 </script>
 
 <Box>
-  <!-- scan camera container -->
   <Box
     flow="horizontal"
     justify="center"

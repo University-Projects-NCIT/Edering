@@ -1,5 +1,5 @@
 <script>
-  import Main from 'routes/Main.svelte';
+  import Main from 'pages/restaurant_detail/Main.svelte';
 </script>
 
 <Main />

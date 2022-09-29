@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export const envData = {
   // firebase: {
   //   apiKey: process.env.FIREBASE_API_KEY,
@@ -17,7 +18,19 @@ export const envData = {
     messagingSenderId: '671647283683',
     appId: '1:671647283683:web:2315f8c9c32820a10488d6',
     measurementId: 'G-NHRMJTNBH3',
+=======
+const envData = {
+  firebase: {
+    apiKey: process.env.FIREBASE_API_KEY?.trim(),
+    authDomain: 'edering-authentication.firebaseapp.com'.trim(),
+    projectId: process.env.FIREBASE_PROJECT_ID?.trim(),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET?.trim(),
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID?.trim(),
+    appId: process.env.FIREBASE_APP_ID?.trim(),
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID?.trim(),
+>>>>>>> origin
   },
+  baseURL: process.env.BASE_URL,
 };
 
-export default {};
+export default envData;
