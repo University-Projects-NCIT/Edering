@@ -1,4 +1,4 @@
-export interface IHotels {
+export interface IHotel {
   id?: string;
   name?: string;
   location?: string;
@@ -7,4 +7,5 @@ export interface IHotels {
   rating?: number;
   open_time?: string;
   close_time?: string;
+  account_create?: string;
 }
