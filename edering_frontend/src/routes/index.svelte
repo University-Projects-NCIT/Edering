@@ -1,5 +1,7 @@
 <script lang="ts">
-  import HomePage from 'pages/home/Home.svelte';
+  import { goto } from '@roxi/routify';
+
+  // import HomePage from 'pages/home/Home.svelte';
 
   // onMount(async () => {
   //   let res = await request<IUserData>({
@@ -30,7 +32,9 @@
 
   //   console.log('response', response);
   // };
+
+  $goto('/restaurant');
 </script>
 
 <!-- <button on:click={() => apiCall()}>Post</button> -->
-<HomePage />
+<!-- <HomePage /> -->
