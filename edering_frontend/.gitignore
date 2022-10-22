@@ -6,3 +6,4 @@
 .env
 .routify
 package-lock.json
+yarn.lock
