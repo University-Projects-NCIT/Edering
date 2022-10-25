@@ -49,12 +49,11 @@
       <Box className="mt-2">
         <TopNav />
       </Box>
-      <!-- //search bar -->
       <TabsMainPage displayPage={RestaurantDetailTab.Menu}>
         <MenuPage />
       </TabsMainPage>
       <TabsMainPage displayPage={RestaurantDetailTab.About}>
-        <About />
+        <About {restaurant} />
       </TabsMainPage>
       <TabsMainPage displayPage={RestaurantDetailTab.Chat}>
         <Chat />
