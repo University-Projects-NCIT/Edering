@@ -35,10 +35,6 @@
 
   function login() {
     signInWithPopup(auth, googleProvider);
-
-
-
-    
   }
 
   function logout() {

@@ -4,7 +4,6 @@
   import type { IMessage, IUser } from 'types';
   import Box from '../../components/layouts/Box.svelte'
   import {afterUpdate, tick} from 'svelte'
-  import { animationFrameScheduler } from 'rxjs';
   import SendMsg from 'pages/chat/components/SendMsg.svelte';
   import RecieveMsg from 'pages/chat/components/RecieveMsg.svelte';
   import type { UserType } from 'types/UserType';
@@ -54,12 +53,10 @@
     });
 
   afterUpdate(() => {
-		console.log("afterUpdate");
 		if(msgData) scrollToBottom(msgElement);
   });
 	
 	$: if(msgData && msgElement) {
-		console.log("tick");
 		scrollToBottom(msgElement);
 	}
 
