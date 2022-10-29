@@ -1,8 +1,8 @@
 <script lang="ts">
   import Input from 'components/input_components/Input.svelte';
+
   import Box from 'components/layouts/Box.svelte';
-  import type { IFoodCategory } from 'types/foodCategory.types';
-  import TopNav from './components/TopNav.svelte';
+  import type { IFoodCategory } from 'types';
 
   const foodCategories: IFoodCategory[] = [
     {
@@ -42,65 +42,39 @@
         'https://images.squarespace-cdn.com/content/v1/53ecd1bde4b0a6f9524254f8/1568978332751-S0MQASS04VHMX52WTZNI/must-have-stick-foods.jpg?format=2500w',
     },
   ];
-
-  let navItems = ['Menu', 'About', 'Comments', 'Chats'];
-
-  let hotelImgUrl =
-    'https://lh3.googleusercontent.com/p/AF1QipNWwQYU9l-pR7WFY6ZjIwplIiYa4eA7tMX_4wJy=w768-h768-n-o-v1';
 </script>
 
-<Box className="pb-12">
-  <img class="banner-img w-full" src={hotelImgUrl} alt="" />
-  <!-- detail container -->
-  <Box className="px-2">
-    <!-- //topnav -->
-    <Box className="mt-2">
-      <TopNav {navItems} />
-    </Box>
-    <!-- //search bar -->
-    <Box className="mt-3">
-      <Input placeholder="Search foods..." />
-    </Box>
-
-    <Box className="flex mt-2">
-      <h3 class="text-base text-black-primary font-bold">Eatme</h3>
-      <Box
-        className="rounded-full bg-yellow-primary mt-1"
-        style="width: 0.4rem; height: 0.4rem;"
-      />
-    </Box>
-
-    <Box
-      flow="horizontal"
-      justify="center"
-      align="center"
-      className="flex-wrap gap-4 mt-4"
-    >
-      <!-- food categories list -->
-      {#each foodCategories as category}
-        <Box
-          className="bg-gray-primary rounded-3xl p-4 text-center hover:cursor-pointer food-category"
-        >
-          <img
-            class="w-20 h-16 rounded-2xl"
-            src={category?.image_uri_id ?? ''}
-            alt=""
-          />
-          <p class="text-xs text-black-primary font-medium">
-            {category?.c_name}
-          </p>
-        </Box>
-      {/each}
-    </Box>
-  </Box>
+<Box className="mt-3">
+  <Input placeholder="Search foods..." />
 </Box>
 
-<style>
-  .banner-img {
-    aspect-ratio: 2/1;
-  }
+<Box className="flex mt-2">
+  <h3 class="text-base text-black-primary font-bold">Eatme</h3>
+  <Box
+    className="rounded-full bg-yellow-primary mt-1"
+    style="width: 0.4rem; height: 0.4rem;"
+  />
+</Box>
 
-  :global(.food-category:hover p) {
-    color: #ffa800;
-  }
-</style>
+<Box
+  flow="horizontal"
+  justify="center"
+  align="center"
+  className="flex-wrap gap-4 mt-4"
+>
+  <!-- food categories list -->
+  {#each foodCategories as category}
+    <Box
+      className="bg-gray-primary rounded-3xl p-4 text-center hover:cursor-pointer food-category"
+    >
+      <img
+        class="w-20 h-16 rounded-2xl"
+        src={category?.image_uri_id ?? ''}
+        alt=""
+      />
+      <p class="text-xs text-black-primary font-medium">
+        {category?.c_name}
+      </p>
+    </Box>
+  {/each}
+</Box>
