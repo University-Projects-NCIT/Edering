@@ -29,8 +29,7 @@
     </div>
 
     <div class="flex pt-4 justify-center">
-      <!-- <button class="rounded-full px-4 py-1 {isAccepted? "bg-green-500" : "bg-zinc-300"} mr-1">Accepted</button> -->
-      <button class="rounded-full px-4 py-1 bg-zinc-300 mr-1">Accepted</button>
+      <button class="rounded-full px-4 py-1 {msg.accepted? "bg-green-500" : "bg-zinc-300"} mr-1">Accepted</button>
       <button class="rounded-full px-4 py-1 bg-red-500 ml-1">Cancel</button>
     </div>
 

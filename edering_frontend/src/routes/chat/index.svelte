@@ -2,9 +2,8 @@
   import { db } from 'config/conn_firebase';
   import { user_store } from 'store';
   import type { IMessage, IUser } from 'types';
-  import Box from '../../components/layouts/Box.svelte';
-  import { afterUpdate, tick } from 'svelte';
-  import { animationFrameScheduler } from 'rxjs';
+  import Box from '../../components/layouts/Box.svelte'
+  import {afterUpdate, tick} from 'svelte'
   import type { UserType } from 'types/UserType';
   import CustomerOrderMsg from 'pages/restaurant_detail/chat/components/CustomerOrderMsg.svelte';
   import ProviderOrderMsg from 'pages/restaurant_detail/chat/components/ProviderOrderMsg.svelte';
@@ -53,12 +52,14 @@
     });
 
   afterUpdate(() => {
-    console.log('afterUpdate');
-    if (msgData) scrollToBottom(msgElement);
+		if(msgData) scrollToBottom(msgElement);
   });
+	
+	$: if(msgData && msgElement) {
+		scrollToBottom(msgElement);
+	}
 
   $: if (msgData && msgElement) {
-    console.log('tick');
     scrollToBottom(msgElement);
   }
 
