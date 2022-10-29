@@ -60,7 +60,6 @@
 	}
 
   $: if (msgData && msgElement) {
-    console.log('tick');
     scrollToBottom(msgElement);
   }
 
