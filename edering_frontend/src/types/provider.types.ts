@@ -17,3 +17,14 @@ export interface IProvider {
   ratings?: IRating[];
   provider_order?: IOrder[];
 }
+
+export interface IListOfResturants {
+  id?: string;
+  imageId?: string;
+  name?: string;
+  knownFor?: string;
+  openTime?: string;
+  closeTime?: string;
+  location?: string;
+  rating?: number;
+}

@@ -1,10 +1,10 @@
-import { writable } from "svelte/store"
-import type { Customer, Order } from "types"
+import { writable } from 'svelte/store';
+import type { ICustomer } from 'types/customer.types';
 
-const customerState: Customer = {
+const customerState: ICustomer = {
   id: '',
   customer_order: [],
-  user_scan: []
-}
+  user_scan: [],
+};
 
-export const customer = writable(customerState)
+export const customer = writable(customerState);
