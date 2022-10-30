@@ -7,9 +7,7 @@ export * from './input.types';
 export * from './menu.types';
 export * from './message.types';
 export * from './orders.types';
-<<<<<<< HEAD
-export * from './ppp_models.type';
-=======
 export * from './comment.types';
 export * from './rating.types';
->>>>>>> fb12793 (named export interface)
+export * from './userScan.types';
+export * from './foodCategory.types';
