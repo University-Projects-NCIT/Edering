@@ -1,15 +1,15 @@
 <script lang="ts">
   import Box from 'components/layouts/Box.svelte';
   import Body from 'components/typography/Body.svelte';
-  import type { IHotel } from 'types/hotels.types';
   import StarRating from 'svelte-star-rating';
   import { url } from '@roxi/routify';
   import {
     restaurantDetailRoute,
     RestaurantDetailTab,
   } from 'pages/restaurant_detail/restaurantRoute';
+  import type { IListOfResturants } from 'types';
 
-  export let restaurantData: IHotel;
+  export let restaurantData: IListOfResturants;
   $: console.log('iddddddd', restaurantData.id);
 </script>
 
@@ -23,7 +23,7 @@
 >
   <Box flow="horizontal" className="rounded-l-2xl">
     <Box className="flex w-2/5 rounded-l-2xl">
-      <img src={restaurantData.image_uri_id} alt="" class="rounded-l-2xl" />
+      <img src={restaurantData.imageId} alt="" class="rounded-l-2xl" />
     </Box>
 
     <Box className="bg-gray-primary rounded-r-2xl px-2  py-4 w-3/5 space-y-3">
@@ -50,13 +50,13 @@
         <Box flow="horizontal" align="center" className="space-x-1 ml-icon">
           <img class="w-2" src="/icons/time.svg" alt="" />
           <Body style="font-size: 0.6rem; line-height: 0.6rem" className="time">
-            {restaurantData.open_time} - {restaurantData.close_time}</Body
+            {restaurantData.openTime} - {restaurantData.closeTime}</Body
           >
         </Box>
 
         <Box flow="horizontal" align="center" className="ml-icon space-x-1">
           <img class="w-2" src="/icons/famous.svg" alt="" />
-          <Body className="famous">{restaurantData.known_for}</Body>
+          <Body className="famous">{restaurantData.knownFor}</Body>
         </Box>
 
         <Box className="ml-icon">
