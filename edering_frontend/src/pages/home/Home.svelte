@@ -3,7 +3,7 @@
   import Box from 'components/layouts/Box.svelte';
   import LoadingUi from 'components/loading/LoadingUI.svelte';
   import Body from 'components/typography/Body.svelte';
-  import { request } from 'helper';
+  import { calculateRating, request } from 'helper';
   import { onMount } from 'svelte';
   import {
     ApiRequestMethods,
@@ -19,17 +19,6 @@
   let searchValue = '';
   let listOfRestaurants: IListOfResturants[] = [];
   $: console.log('listofrestaurants', listOfRestaurants);
-
-  const calculateRating = (ratings: IRating[]) => {
-    const noOfRatings = ratings.length;
-    let avgRating = 0;
-    if (noOfRatings > 0) {
-      ratings.map(item => {
-        avgRating += Number(item.rating);
-      });
-    }
-    return Number((avgRating / noOfRatings).toFixed(2));
-  };
 
   const getRestaurants = async ({ searchAction = false }) => {
     isLoading = true;
