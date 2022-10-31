@@ -9,7 +9,7 @@ const providerState: IProvider = {
   known_for: '',
   open_time: '',
   close_time: '',
-  created_at: Date.now(),
+  created_at: Date.now().toString(),
   food_categories: [],
   comments: [],
   ratings: [],
