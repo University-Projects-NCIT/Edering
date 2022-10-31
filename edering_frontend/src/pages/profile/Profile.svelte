@@ -1,6 +1,8 @@
 <script>
   import Box from 'components/layouts/Box.svelte';
 
+  export let onLogout = () => {}
+  
   const userInfo = {
     name: 'Grishmin Karki',
     imgUrl: 'https://avatars.githubusercontent.com/u/46286762?v=4',
@@ -18,7 +20,7 @@
     >
       Profile
     </h1>
-    <Box className="bg-gray-primary p-2 rounded-full hover:cursor-pointer">
+    <Box onClick={onLogout()} className="bg-gray-primary p-2 rounded-full hover:cursor-pointer">
       <img class="w-4" src="/icons/logout.svg" alt="" />
     </Box>
   </Box>
