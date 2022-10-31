@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import type { Provider, Order } from 'types';
+import type { IProvider } from 'types';
 
-const providerState: Provider = {
+const providerState: IProvider = {
   id: '',
   name: '',
   location: '',

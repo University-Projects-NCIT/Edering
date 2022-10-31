@@ -6,10 +6,10 @@
   import {ApiRequestMethods, IUser} from 'types';
   import { user_store, provider, customer, providerForm} from 'store';
   import { signInWithPopup } from 'firebase/auth';
-  import type { Customer, Provider } from 'types';
   import { request } from 'helper';
   import ProviderForm from './components/ProviderForm.svelte';
   import { userType } from 'store/usertype.store';
+  import type { ICustomer, IProvider } from 'types';
 
   let showPrvForm = false;
 
@@ -39,14 +39,14 @@
       known_for: '',
       open_time: '',
       close_time: '',
-      created_at: 0 
+      created_at: '' 
     })
   }
 
   const getCustomer = () => {
     const cstUrl = `/customers/?id=${$user_store.id}`;
 
-    request<Customer>({
+    request<ICustomer>({
       url : cstUrl
     }).then( res => {
       if(res.length > 0){
@@ -54,22 +54,22 @@
         const customerResult = {
           id : cst.id,
           customer_order: cst.customer_order,
-          user_scan: cst.user_scan
+          user_scan: cst.user_scan,
         };
         customer.set(customerResult);
       }
     });
-  }
+  };
 
   const getProvider = () => {
     const prvUrl = `/providers/?id=${$user_store.id}`;
 
-    request<Provider>({
+    request<IProvider>({
       url : prvUrl
     }).then( res => {
       if(res.length > 0){
         const prv = res[0];
-        const providerResult = {
+        const providerResult: IProvider = {
           id: prv.id,
           name: prv.name,
           location: prv.location,
@@ -85,17 +85,17 @@
         };
         provider.set(providerResult);
 
-        console.log("provider store ", $provider);
-        console.log("provider response ", res);
+        console.log('provider store ', $provider);
+        console.log('provider response ', res);
       }
-    })
-  }
+    });
+  };
 
   const updatePrv = async () => {
       const userId = $user_store.id;
       const prvUrl = `/providers/?id=${userId}`;
 
-      const provider: Provider = {
+      const provider: IProvider = {
         id: userId,
         name: $providerForm.name,
         location: $providerForm.location,
@@ -103,7 +103,7 @@
         known_for: $providerForm.known_for,
         open_time: $providerForm.open_time,
         close_time: $providerForm.close_time,
-        created_at: Date.now()
+        created_at: `${Date.now()}`
       }
 
       alert("Update prv called")
@@ -124,7 +124,7 @@
     const userId = $user_store.id;
       const cstUrl = `/customers/?id=${userId}`;
 
-      const customer: Customer = {
+      const customer: ICustomer = {
         id : userId,
       }
 
@@ -167,7 +167,6 @@
       console.log('not logged in');
     }
   });
-
 </script>
 
 <Box>
