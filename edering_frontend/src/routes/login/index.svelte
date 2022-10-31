@@ -184,7 +184,7 @@
     </Box>  
   {:else if showPrvForm}
     <Box>
-      <ProviderForm updatePrv= {() => updatePrv}/>
+      <ProviderForm updatePrv= { updatePrv }/>
     </Box>
   {:else}
     <Box className="min-h-screen w-screen bg-[url('/icons/login_back4.svg')] bg-cover ">
