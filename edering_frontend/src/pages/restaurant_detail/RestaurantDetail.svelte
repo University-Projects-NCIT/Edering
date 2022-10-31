@@ -69,7 +69,7 @@
         <TopNav />
       </Box>
       <TabsMainPage displayPage={RestaurantDetailTab.Menu}>
-        <MenuPage />
+        <MenuPage {restaurantId} />
       </TabsMainPage>
       <TabsMainPage displayPage={RestaurantDetailTab.About}>
         <About {restaurant} />
