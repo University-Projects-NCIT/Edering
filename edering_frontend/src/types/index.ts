@@ -2,7 +2,6 @@ export * from './shared.types';
 export * from './text.types';
 export * from './request.types';
 export * from './user.types';
-export * from './hotels.types';
 export * from './input.types';
 export * from './menu.types';
 export * from './message.types';
