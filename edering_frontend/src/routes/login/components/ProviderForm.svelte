@@ -18,8 +18,6 @@
         return alert("Location can't be empty");
     }
     updatePrv();
-
-    alert('update call ');
   };
 
   const uploadImage = () => {
