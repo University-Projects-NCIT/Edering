@@ -11,3 +11,5 @@ export * from './comment.types';
 export * from './rating.types';
 export * from './userScan.types';
 export * from './foodCategory.types';
+export * from './provider.types';
+export * from './customer.types';

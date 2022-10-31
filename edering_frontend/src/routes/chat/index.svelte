@@ -131,7 +131,7 @@
             {/if}
           {:else if msg.sender == currentLogedUserId}
             <!-- //msg from current user , outgoing msg  -->
-            <div class="px-4 py-1">
+            <div class="px-4 py-1 flex-shrink">
               <SendMsg {msg} />
             </div>
           {:else}

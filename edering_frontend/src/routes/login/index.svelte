@@ -3,21 +3,22 @@
   import Box from 'components/layouts/Box.svelte';
   import { authState } from 'rxfire/auth';
   import { auth, googleProvider } from 'config/conn_firebase';
-  import { ApiRequestMethods, IProvider, IUser } from 'types';
-  import { user_store, provider, customer } from 'store';
+  import {ApiRequestMethods, IUser} from 'types';
+  import { user_store, provider, customer, providerForm} from 'store';
   import { signInWithPopup } from 'firebase/auth';
-  import type { UserType } from 'types/UserType';
   import { request } from 'helper';
-  import type { ICustomer } from 'types/customer.types';
+  import ProviderForm from './components/ProviderForm.svelte';
+  import { userType } from 'store/usertype.store';
+  import type { ICustomer, IProvider } from 'types';
 
-  let userType: UserType = 'Customer';
+  let showPrvForm = false;
 
   const unsubscribe = authState(auth).subscribe(user => {
     const result = {
       id: user?.uid ?? '',
       name: user?.displayName ?? '',
       email: user?.email ?? '',
-      type: userType,
+      type: $userType,
       imageUrl: user?.photoURL ?? '',
     };
     user_store.set(result);
@@ -29,18 +30,29 @@
 
   function logout() {
     auth.signOut();
+    customer.set({id:''})
+    provider.set({
+      id: '',
+      name: '',
+      location: '',
+      image_id: '',
+      known_for: '',
+      open_time: '',
+      close_time: '',
+      created_at: '' 
+    })
   }
 
   const getCustomer = () => {
     const cstUrl = `/customers/?id=${$user_store.id}`;
 
     request<ICustomer>({
-      url: cstUrl,
-    }).then((res: ICustomer[]) => {
-      if (res && res?.length > 0) {
-        const cst = res[0];
-        const customerResult: ICustomer = {
-          id: cst.id,
+      url : cstUrl
+    }).then( res => {
+      if(res.length > 0){
+        const cst = res[0]
+        const customerResult = {
+          id : cst.id,
           customer_order: cst.customer_order,
           user_scan: cst.user_scan,
         };
@@ -53,9 +65,9 @@
     const prvUrl = `/providers/?id=${$user_store.id}`;
 
     request<IProvider>({
-      url: prvUrl,
-    }).then((res: IProvider[]) => {
-      if (res && res.length > 0) {
+      url : prvUrl
+    }).then( res => {
+      if(res.length > 0){
         const prv = res[0];
         const providerResult: IProvider = {
           id: prv.id,
@@ -79,104 +91,148 @@
     });
   };
 
-  // when you load or reload the page
-  auth.onAuthStateChanged(async auth => {
-    getProvider();
-    getCustomer();
-    if (auth) {
-      console.log('Loged in');
-
+  const updatePrv = async () => {
       const userId = $user_store.id;
-      const cstUrl = `/customers/?id=${userId}`;
       const prvUrl = `/providers/?id=${userId}`;
-      const url = userType == 'Customer' ? cstUrl : prvUrl;
-
-      const customer: ICustomer = {
-        id: userId,
-      };
 
       const provider: IProvider = {
         id: userId,
-        name: 'test',
-        location: '34.34,3434.34',
+        name: $providerForm.name,
+        location: $providerForm.location,
         image_id: $user_store.imageUrl,
-        known_for: 'Momo',
-        open_time: '10:30 AM',
-        close_time: '12:30 PM',
-        created_at: Date.now().toString(),
-      };
+        known_for: $providerForm.known_for,
+        open_time: $providerForm.open_time,
+        close_time: $providerForm.close_time,
+        created_at: `${Date.now()}`
+      }
 
-      request({ url }).then(res => {
-        if (res.count == 0 && userId) {
+      alert("Update prv called")
+
+      await request({
+        'url': prvUrl,
+        'method': ApiRequestMethods.post,
+        'data': provider
+      }).then( res => {
+        // if(res > 0){
+        //   alert("Updated !")
+        //   // TODO goto profile 
+        // }
+      })
+  }
+
+  const updateCst = async () => {
+    const userId = $user_store.id;
+      const cstUrl = `/customers/?id=${userId}`;
+
+      const customer: ICustomer = {
+        id : userId,
+      }
+
+      request({ 'url': cstUrl }).then( res => {
+        if(res.length == 0 && userId){
           request({
-            url,
-            method: ApiRequestMethods.post,
-            data: userType == 'Customer' ? customer : provider,
-          }).then(res => {
-            console.log(res);
-          });
+            'url': cstUrl,
+            'method': ApiRequestMethods.post,
+            'data': customer 
+            }
+          ).then(res => {
+            if(res.length > 0){
+              // updated customer goto profile 
+            }
+            console.log(res)
+          })
         }
-      });
+      })
+  }
+
+  // when you load or reload the page
+  auth.onAuthStateChanged( async (auth) => {
+    if($userType == 'Provider'){
+      await getProvider();
+    }
+    if($userType == 'Customer'){
+      await getCustomer();
+    }
+    if (auth) {
+      console.log("Loged in");
+      if($userType == 'Customer'){
+        updateCst();
+      }
+      if($userType == 'Provider'){
+        if($provider.id == ''){
+          showPrvForm = true 
+        }
+      }
     } else {
       console.log('not logged in');
     }
   });
 </script>
 
-<Box
-  className="min-h-screen w-screen bg-[url('/icons/login_back4.svg')] bg-cover "
->
-  <div class="pt-8">
-    <div class="flex items-center justify-center mb-10">
-      <div class="h-6 w-1/4 bg-[url('/icons/edering.png')] bg-cover" />
-    </div>
+<Box>
+  {#if $customer.id != '' && $userType == 'Customer'}
+    <Box>
+      <div><h1>Customer Profile</h1> 
+        <div on:click={() => logout()}>Log out</div>
+      </div>
+    </Box>
+  {:else if $provider.id != '' && $userType == 'Provider'}
+    <Box>
+      <div><h1>Provider Profile</h1> 
+        <div on:click={() => logout()}>Log out</div>
+      </div>
+    </Box>  
+  {:else if showPrvForm}
+    <Box>
+      <ProviderForm updatePrv= {() => updatePrv}/>
+    </Box>
+  {:else}
+    <Box className="min-h-screen w-screen bg-[url('/icons/login_back4.svg')] bg-cover ">
+      <div class="pt-8">
+        <div class="flex items-center justify-center mb-10">
+          <div class="h-6 w-1/4 bg-[url('/icons/edering.png')] bg-cover" />
+        </div>
 
-    <div
-      on:click={() => {
-        userType = 'Customer';
-      }}
-      class="content-center border-2 {userType == 'Customer'
-        ? 'bg-color1-orange1'
-        : 'bg-transparent'}
-       border-color1-blueText flex items-center justify-center h-10 max-w-md mx-8
-        rounded-full text-center hover:cursor-pointer"
-    >
-      <p class="text-color1-blueText">Login as a Customer</p>
-    </div>
+        <div
+          on:click={() => { userType.set('Customer')}}
+          class="content-center border-2 {$userType == 'Customer' ? 'bg-color1-orange1': 'bg-transparent'}
+          border-color1-blueText flex items-center justify-center h-10 max-w-md mx-8
+            rounded-full text-center">
+          <p class="text-color1-blueText">Login as a Customer</p>
+        </div>
 
-    <div
-      on:click={() => {
-        userType = 'Provider';
-      }}
-      class="mt-4 content-center border-2 {userType == 'Provider'
-        ? 'bg-color1-orange1'
-        : 'bg-transparent'}
-       border-color1-green1 flex items-center justify-center h-10 max-w-md mx-8
-        rounded-full text-center hover:cursor-pointer"
-    >
-      <p class="text-color1-green1">Login as a Provider</p>
-    </div>
+        <div
+          on:click={() => { userType.set('Provider')}}
+          class="mt-4 content-center border-2 {$userType == 'Provider' ? 'bg-color1-orange1': 'bg-transparent'}
+          border-color1-green1 flex items-center justify-center h-10 max-w-md mx-8
+            rounded-full text-center">
+          <p class="text-color1-green1">Login as a Provider</p>
+        </div>
 
-    <div class="flex items-center justify-center mt-10">
-      <div class="w-40 h-40 bg-[url('/icons/placeholder.png')] bg-cover" />
-    </div>
+        <div class="flex items-center justify-center mt-10">
+          <div class="w-40 h-40 bg-[url('/icons/placeholder.png')] bg-cover" />
+        </div>
 
-    <div
-      class="mt-4 content-center border-2 border-black-primary
-     flex items-center justify-center h-10 max-w-md mx-8
-     rounded-full text-center hover:cursor-pointer"
-      on:click={login}
-    >
-      <img class="w-5 mr-4" src={'/icons/google.svg'} alt="" />
-      <p class="text-black-primary">Login with google</p>
-    </div>
+        <div
+          on:click={login}
+          class="mt-4 content-center border-2 border-black-primary
+          flex items-center justify-center h-10 max-w-md mx-8
+          rounded-full text-center">
+          <img class="w-5 mr-4" src={'/icons/google.svg'} alt="" />
+          <p class="text-black-primary">Login with google</p>
+        </div>
 
-    {#if $user_store.id}
-      <!-- Redirect ot profile page -->
-      <div on:click={() => logout()}>Log out</div>
-    {/if}
-  </div>
+        
+        {#if $user_store.id}
+          <!-- Redirect ot profile page -->
+          <div on:click={() => logout()}>Log out</div>  
+        {/if}
+      </div>
+    </Box>
+  {/if}
 </Box>
 
 <style>
+
 </style>
+
