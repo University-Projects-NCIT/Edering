@@ -6,20 +6,23 @@
 
   export let item: IMenu;
 
-  export let quantityCount = 0;
-  let showDecrementIcon = true;
+  $: quantityCount = $cartStore.cartItems.length ?? 0;
+  let showDecrementIcon = false;
   // export let incrementQuantity: () => void;
   // export let decrementQuantity: () => void;
 
-  const incrementQuantity = () => {
-    console.log('item', item);
-    cartStore.incrementQty();
-    quantityCount++;
+  const addItemToCart = () => {
+    console.log('additem', item);
+    // cartStore.inc;
+    // quantityCount++;
+    cartStore.addToCart(item);
   };
 
-  const decrementQuantity = () => {
-    cartStore.decrementQty();
-    quantityCount--;
+  const removeItemFromCart = () => {
+    // cartStore.decrementQty();
+    // quantityCount--;
+    console.log('removeitem', item);
+    cartStore.removeFromCart(item);
   };
 
   $: console.log('cartstore', $cartStore);
@@ -34,7 +37,7 @@
 <Box flow="horizontal" align="center" className="space-x-2">
   {#if showDecrementIcon}
     <p
-      on:click={decrementQuantity}
+      on:click={removeItemFromCart}
       class="bg-white text-black-primary text-lg leading-4 w-4 text-center rounded-full hover:cursor-pointer"
     >
       -
@@ -45,7 +48,7 @@
   {/if}
 
   <p
-    on:click={incrementQuantity}
+    on:click={addItemToCart}
     class="bg-yellow-primary text-white leading-4 w-4 text-center rounded-full hover:cursor-pointer"
   >
     +
