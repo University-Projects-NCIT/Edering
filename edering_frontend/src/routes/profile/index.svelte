@@ -7,7 +7,7 @@
   import { user_store, provider, customer, providerForm } from 'store';
   import { signInWithPopup } from 'firebase/auth';
   import { request } from 'helper';
-  import ProviderForm from './components/ProviderForm.svelte';
+  import ProviderForm from '../login/components/ProviderForm.svelte';
   import { userType } from 'store/usertype.store';
   import type { ICustomer, IProvider } from 'types';
   import Profile from '../../pages/profile/Profile.svelte'
