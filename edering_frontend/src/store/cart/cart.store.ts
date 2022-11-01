@@ -1,8 +1,12 @@
 import { writable } from 'svelte/store';
+import type { IMenu } from 'types';
 
-const initialCartState = {
-  itemQty: 0,
-  cartLineItems: [],
+interface IInitialCartState {
+  cartItems: IMenu[];
+}
+
+const initialCartState: IInitialCartState = {
+  cartItems: [],
 };
 
 const createCartStore = () => {
@@ -11,16 +15,17 @@ const createCartStore = () => {
   return {
     set,
     subscribe,
-    incrementQty: () => {
+    addToCart: (item: IMenu) => {
       update(store => ({
         ...store,
-        itemQty: store.itemQty + 1,
+        cartItems: [...store.cartItems, item],
       }));
     },
-    decrementQty: () => {
+
+    removeFromCart: (item: IMenu) => {
       update(store => ({
         ...store,
-        itemQty: store.itemQty - 1,
+        cartItems: store.cartItems.filter(({ id }) => id !== item.id) ?? [],
       }));
     },
   };
