@@ -5,22 +5,26 @@
   // import { cartStore } from 'store/cart/cart.store';
 
   export let item: IMenu;
+  console.log('specificitem', item);
 
-  $: quantityCount = $cartStore.cartItems.length ?? 0;
+  $: cartItemsQuantity = $cartStore.cartItems.length ?? 0;
   let showDecrementIcon = false;
+  let quantityCount = 0;
+
   // export let incrementQuantity: () => void;
   // export let decrementQuantity: () => void;
 
   const addItemToCart = () => {
     console.log('additem', item);
     // cartStore.inc;
-    // quantityCount++;
+    quantityCount++;
     cartStore.addToCart(item);
   };
 
   const removeItemFromCart = () => {
     // cartStore.decrementQty();
-    // quantityCount--;
+    if (quantityCount < 1) return;
+    quantityCount--;
     console.log('removeitem', item);
     cartStore.removeFromCart(item);
   };

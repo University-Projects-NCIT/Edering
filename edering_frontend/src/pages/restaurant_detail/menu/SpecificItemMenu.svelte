@@ -7,16 +7,15 @@
   import { onMount } from 'svelte';
   import { ApiRequestMethods, IFoodCategory } from 'types';
   import type { IMenu } from 'types/menu.types';
-  import IncDecItemQuantity from './components/IncDecItemQuantity.svelte';
+  import AddRemoveItem from './components/AddRemoveItem.svelte';
 
   $: console.log('c_id', $params);
   $: cId = $params?.c_id;
   let isItemAddedToCart = false;
   let isLoading = false;
-  $: console.log('count', $cartStore.itemQty);
 
-  $: itemQty = $cartStore.itemQty;
-  $: itemQty ? (isItemAddedToCart = true) : (isItemAddedToCart = false);
+  $: isCartHasItem = $cartStore.cartItems.length > 0;
+  $: isCartHasItem ? (isItemAddedToCart = true) : (isItemAddedToCart = false);
 
   let foodCategory: IFoodCategory;
   let menus: IMenu[] = [];
@@ -83,7 +82,7 @@
                   {item?.price}
                 </p>
                 <Box>
-                  <IncDecItemQuantity {item} />
+                  <AddRemoveItem {item} />
                 </Box>
               </Box>
             </Box>
