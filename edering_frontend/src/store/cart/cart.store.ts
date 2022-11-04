@@ -1,8 +1,15 @@
 import { writable } from 'svelte/store';
 import type { IMenu } from 'types';
 
+export interface ICartItem {
+  id?: string;
+  name?: string;
+  price?: string;
+  quantity?: number;
+}
+
 interface IInitialCartState {
-  cartItems: IMenu[];
+  cartItems: ICartItem[];
 }
 
 const initialCartState: IInitialCartState = {
@@ -15,10 +22,30 @@ const createCartStore = () => {
   return {
     set,
     subscribe,
-    addToCart: (item: IMenu) => {
+    addToCart: (state: IInitialCartState, item: ICartItem) => {
+      console.log('state', state);
+      let updatedCartItems: ICartItem[] = [];
+
+      if (state.cartItems.length === 0) updatedCartItems = [item];
+
+      if (state.cartItems.length > 0) {
+        state.cartItems.forEach((currItem, i) => {
+          if (currItem.id === item.id) {
+            updatedCartItems = state.cartItems;
+            updatedCartItems[i] = {
+              ...currItem,
+              quantity: item.quantity,
+            };
+          } else {
+            updatedCartItems = [...state.cartItems, item];
+          }
+        });
+      }
+
+      console.log('updated', updatedCartItems);
       update(store => ({
         ...store,
-        cartItems: [...store.cartItems, item],
+        cartItems: [...updatedCartItems],
       }));
     },
 
