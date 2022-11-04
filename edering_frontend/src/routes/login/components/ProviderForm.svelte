@@ -1,6 +1,7 @@
 <script lang="ts">
   import Box from 'components/layouts/Box.svelte';
   import { providerForm } from 'store';
+  import { storage } from 'config/conn_firebase';
 
   let avatar, fileinput;
 
@@ -20,30 +21,49 @@
     updatePrv();
   };
 
-  const uploadImage = () => {
-    // storageRef.put(file).then(() => {
-    // firebase.storage().ref("users").child(user.uid).getDownloadURL()
-    //   .then((downloadURL) => {
-    //   }
-    // }
-  };
-
   const onFileSelected = e => {
     let image = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(image);
-    reader.onload = e => {
-      //  providerForm.set({
-      //   name: $providerForm.name,
-      //   location: $providerForm.location,
-      //   image_id: e.target?.result,
-      //   known_for: $providerForm.known_for,
-      //   close_time: $providerForm.close_time,
-      //   open_time: $providerForm.open_time,
-      //   created_at: $providerForm.created_at
-      //  })
-    };
+    handleUploadImage(image,e.target.name)
   };
+
+  const handleUploadImage = (file,name) => {
+    const imageSizeMB = file.size / 1024 / 1024;
+    
+    if (imageSizeMB > 3){
+      return alert(" File size can not be more than 3 MB. Please compress you image and upload again !");
+    }
+     
+    const image_name = file.name;
+    const timestamp = String(Math.round(new Date().getTime()/1000))
+    const uploadTask = storage.ref(`${name}/${timestamp+image_name}`).put(file);
+    
+    uploadTask.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage
+        .ref(name)
+        .child(timestamp + image_name)
+        .getDownloadURL()
+        .then(url => {
+          providerForm.set({
+          name: $providerForm.name,
+          location: $providerForm.location,
+          image_id: url,
+          known_for: $providerForm.known_for,
+          close_time: $providerForm.close_time,
+          open_time: $providerForm.open_time,
+          created_at: $providerForm.created_at
+        });
+      })
+    })
+  };
+  
 </script>
 
 <Box>

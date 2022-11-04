@@ -163,6 +163,7 @@
       console.log('not logged in');
     }
   });
+  
 </script>
 
 <Box>
@@ -190,20 +191,20 @@
       className="min-h-screen w-screen bg-[url('/icons/login_back4.svg')] bg-cover "
     >
       <div class="pt-8">
-        <div class="flex items-center justify-center mb-10">
-          <div class="h-6 w-1/4 bg-[url('/icons/edering.png')] bg-cover" />
+        <div class="flex items-center justify-center mb-10 p-2">
+          <img class="p-4" src = {'/icons/edering.png'} alt = "logo"/>
         </div>
 
         <div
           on:click={() => {
             userType.set('Customer');
           }}
-          class="content-center border-2 {$userType == 'Customer'
+          class="{ $userType == 'Customer'
             ? 'bg-color1-orange1'
-            : 'bg-transparent'}
+            : 'bg-transparent'
+          }
           border-color1-blueText flex items-center justify-center h-10 max-w-md mx-8
-            rounded-full text-center"
-        >
+            rounded-full text-center content-center border-2">
           <p class="text-color1-blueText">Login as a Customer</p>
         </div>
 
