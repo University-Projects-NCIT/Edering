@@ -5,33 +5,38 @@
   // import { cartStore } from 'store/cart/cart.store';
 
   export let item: IMenu;
+  console.log('specificitem', item);
 
-  $: quantityCount = $cartStore.cartItems.length ?? 0;
+  $: cartItemsQuantity = $cartStore.cartItems.length ?? 0;
   let showDecrementIcon = false;
+  $: itemCount = $cartStore.cartItems.filter(({ id }) => item.id === id).length;
+
+  $: console.log('itemCount', itemCount);
+
+  $: console.log(
+    'itemcountfromstore',
+    $cartStore.cartItems.filter(({ id }) => item.id === id).length
+  );
+
   // export let incrementQuantity: () => void;
   // export let decrementQuantity: () => void;
 
   const addItemToCart = () => {
-    console.log('additem', item);
     // cartStore.inc;
-    // quantityCount++;
+    itemCount++;
     cartStore.addToCart(item);
   };
 
   const removeItemFromCart = () => {
     // cartStore.decrementQty();
-    // quantityCount--;
-    console.log('removeitem', item);
+    if (itemCount < 1) return;
+    itemCount--;
     cartStore.removeFromCart(item);
   };
 
   $: console.log('cartstore', $cartStore);
 
-  $: if (quantityCount > 0) {
-    showDecrementIcon = true;
-  } else {
-    showDecrementIcon = false;
-  }
+  $: itemCount > 0 ? (showDecrementIcon = true) : (showDecrementIcon = false);
 </script>
 
 <Box flow="horizontal" align="center" className="space-x-2">
@@ -43,7 +48,7 @@
       -
     </p>
     <p class="text-black-primary text-xs font-medium">
-      {quantityCount}
+      {itemCount}
     </p>
   {/if}
 
