@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { params } from '@roxi/routify';
+  import { goto, params } from '@roxi/routify';
   import { LoadingUI } from 'components';
   import Box from 'components/layouts/Box.svelte';
   import { request } from 'helper';
@@ -7,19 +7,19 @@
   import { onMount } from 'svelte';
   import { ApiRequestMethods, IFoodCategory } from 'types';
   import type { IMenu } from 'types/menu.types';
-  import IncDecItemQuantity from './components/IncDecItemQuantity.svelte';
+  import AddRemoveItem from './components/AddRemoveItem.svelte';
 
   $: console.log('c_id', $params);
   $: cId = $params?.c_id;
   let isItemAddedToCart = false;
   let isLoading = false;
-  $: console.log('count', $cartStore.itemQty);
-
-  $: itemQty = $cartStore.itemQty;
-  $: itemQty ? (isItemAddedToCart = true) : (isItemAddedToCart = false);
-
   let foodCategory: IFoodCategory;
   let menus: IMenu[] = [];
+
+  $: isCartContainsItem = $cartStore.cartItems.length > 0;
+  $: isCartContainsItem
+    ? (isItemAddedToCart = true)
+    : (isItemAddedToCart = false);
 
   onMount(async () => {
     if (!cId) {
@@ -39,6 +39,10 @@
       }
     }
   });
+
+  const handleClickOnCart = () => {
+    $goto('/cart');
+  };
 </script>
 
 <Box className="pt-5 px-2 space-y-2 pb-11">
@@ -49,6 +53,7 @@
       {foodCategory?.c_name}
     </h1>
     <Box
+      onClick={handleClickOnCart}
       className="bg-gray-primary p-2 rounded-full hover:cursor-pointer relative"
     >
       <img class="w-4" src="/icons/cart.svg" alt="" />
@@ -83,7 +88,7 @@
                   {item?.price}
                 </p>
                 <Box>
-                  <IncDecItemQuantity {item} />
+                  <AddRemoveItem {item} />
                 </Box>
               </Box>
             </Box>
@@ -94,34 +99,4 @@
   {:else}
     <p class="text-center">No data found</p>
   {/if}
-  <!-- chicken -->
-
-  <!-- veg -->
-  <!-- <Box className="">
-    <h3 class="text-sm text-black-primary font-bold">Veg</h3>
-    <Box className="space-y-2">
-      {#each data['veg'] ?? [] as item}
-        <Box flow="horizontal" className="bg-gray-primary rounded-3xl p-4 ">
-          <img
-            class="w-20 h-16 rounded-2xl"
-            src={item?.image_uri_id ?? ''}
-            alt=""
-          />
-          <Box className="px-3 space-y-2 flex-1">
-            <h4 class="text-xs text-black-primary font-medium">
-              {item?.name}
-            </h4>
-            <Box flow="horizontal" align="center" justify="between">
-              <p class="text-xs text-yellow-primary font-medium">
-                {item?.price}
-              </p>
-              <Box>
-                <IncDecItemQuantity {item} />
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      {/each}
-    </Box>
-  </Box> -->
 </Box>

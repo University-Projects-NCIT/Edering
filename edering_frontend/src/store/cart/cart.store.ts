@@ -25,10 +25,20 @@ const createCartStore = () => {
     removeFromCart: (item: IMenu) => {
       update(store => ({
         ...store,
-        cartItems: store.cartItems.filter(({ id }) => id !== item.id) ?? [],
+        cartItems: removeItem(store, item),
       }));
     },
   };
+};
+
+const removeItem = (store: IInitialCartState, item: IMenu) => {
+  const newCartItems = [...store.cartItems];
+  console.log('removeitem', store);
+
+  const cartItemPosition = newCartItems.findIndex(({ id }) => item.id === id);
+  newCartItems.splice(cartItemPosition, 1);
+  console.log(newCartItems);
+  return newCartItems;
 };
 
 export const cartStore = createCartStore();
