@@ -7,10 +7,10 @@
   import { user_store, provider, customer, providerForm } from 'store';
   import { signInWithPopup } from 'firebase/auth';
   import { request } from 'helper';
-  import ProviderForm from '../login/components/ProviderForm.svelte';
   import { userType } from 'store/usertype.store';
   import type { ICustomer, IProvider } from 'types';
-  import Profile from '../../pages/profile/Profile.svelte'
+  import Profile from '../../pages/profile/Profile.svelte';
+  import ProviderForm from '../login/components/ProviderForm.svelte';
 
   let showPrvForm = false;
 
@@ -42,6 +42,7 @@
       close_time: '',
       created_at: '',
     });
+    showPrvForm = false;
   }
 
   const getCustomer = () => {
@@ -109,10 +110,9 @@
       method: ApiRequestMethods.post,
       data: provider,
     }).then(res => {
-
-      if(res != undefined && res.id != ''){
-        showPrvForm = false 
-        getProvider()
+      if (res != undefined && res.id != '') {
+        showPrvForm = false;
+        getProvider();
       }
     });
   };
@@ -170,14 +170,14 @@
     <Box>
       <div>
         <h1>Customer Profile</h1>
-        <Profile onLogout= {logout}/>
+        <Profile onLogout={logout} />
       </div>
     </Box>
   {:else if $provider.id != '' && $userType == 'Provider'}
     <Box>
       <div>
         <h1>Provider Profile</h1>
-        <Profile onLogout= {logout}/>
+        <Profile onLogout={logout} />
         <div on:click={() => logout()}>Log out</div>
       </div>
     </Box>
@@ -233,11 +233,6 @@
           <img class="w-5 mr-4" src={'/icons/google.svg'} alt="" />
           <p class="text-black-primary">Login with google</p>
         </div>
-
-        {#if $user_store.id}
-          <!-- Redirect ot profile page -->
-          <div on:click={() => logout()}>Log out</div>
-        {/if}
       </div>
     </Box>
   {/if}

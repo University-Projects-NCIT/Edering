@@ -21,6 +21,10 @@
   let isLoading = true;
   let restaurant: IListOfResturants;
 
+  function onClickOrder(){
+
+  }
+
   onMount(async () => {
     if (!restaurantId) {
       alert('no restaurant id');
@@ -81,6 +85,10 @@
         <Comment />
       </TabsMainPage>
     </Box>
+
+    <div class="left-1 bottom-1 sticky">
+      <img on:click ={onClickOrder} src={'/icons/order.png'} alt=''>
+    </div>
   </Box>
 {:else}
   <LoadingUI />

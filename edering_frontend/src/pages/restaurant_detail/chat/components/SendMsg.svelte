@@ -2,10 +2,12 @@
     import type { IMessage } from "types";
 
     export let msg: IMessage;  
-    const date = new Date(msg.createdAt);
+    const date = msg.createdAt ? new Date(msg.createdAt) : new Date();
+
 </script>
 
-<div class="rounded-tr-lg rounded-tl-lg rounded-br-lg px-3 py-1 bg-gray-primary flex-shrink">
+<div class="rounded-tr-xl rounded-tl-xl rounded-br-xl px-3 py-1 bg-gray-primary table-caption"
+  style="width: auto; display: inline-block;">
   <p class="text-sm pb-1"> {msg.msg} </p>
   <p class = "" style="font-size: 8px;"> {date.toLocaleString()} </p>
 </div>
