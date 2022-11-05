@@ -2,10 +2,14 @@
   import Button from 'components/buttons/Button.svelte';
   import Box from 'components/layouts/Box.svelte';
   import AddRemoveItem from 'pages/restaurant_detail/menu/components/AddRemoveItem.svelte';
+  import Modal from 'components/modal/Container.svelte';
   import { cartStore } from 'store';
+  import BarLoading from 'components/loading/BarLoading.svelte';
 
   $: cartItems = $cartStore.cartItems;
   let currentTotal = 0;
+  let isOrdering = false;
+  let display = false;
 
   $: newCartItems = cartItems.map(item => {
     item.total = Number(item.price) * Number(item.quantity);
@@ -17,8 +21,42 @@
     newCartItems.forEach(item => (currentTotal += item.total ?? 0));
   };
 
+  const makeOrder = () => {
+    // api request
+  };
+
+  const handleOrder = () => {
+    makeOrder();
+  };
+
   $: newCartItems, calculateTotal();
 </script>
+
+<Modal {display} closeButtonSize="small" onModalClose={() => (display = false)}>
+  <Box slot="form-section" className="p-6">
+    <h2 class="text-sm text-black-primary">
+      Are you sure you want confirm the order?
+    </h2>
+    <Box justify="around" className="pt-8">
+      <BarLoading isLoading={isOrdering}>
+        <Button
+          size="small"
+          label="Yes"
+          on:click={handleOrder}
+          variant="secondary"
+          type="filled"
+        />
+        <Button
+          on:click={() => (display = false)}
+          size="small"
+          label="No"
+          variant="primary"
+          type="filled"
+        />
+      </BarLoading>
+    </Box>
+  </Box>
+</Modal>
 
 <Box className="pt-5 px-2 space-y-2 pb-11">
   <Box>
@@ -67,7 +105,9 @@
       </Box>
 
       <Box className="flex justify-center mt-4">
-        <Button size="medium">Confirm Order</Button>
+        <Button on:click={() => (display = true)} size="medium"
+          >Confirm Order</Button
+        >
       </Box>
     </Box>
   {:else}
