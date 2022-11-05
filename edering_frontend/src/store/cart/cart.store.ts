@@ -31,7 +31,7 @@ const createCartStore = () => {
       if (state.cartItems.length > 0) {
         state.cartItems.forEach((currItem, i) => {
           if (currItem.id === item.id) {
-            updatedCartItems = state.cartItems;
+            updatedCartItems = [...state.cartItems];
             updatedCartItems[i] = {
               ...currItem,
               quantity: item.quantity,
@@ -49,23 +49,27 @@ const createCartStore = () => {
       }));
     },
 
-    removeFromCart: (item: IMenu) => {
+    removeFromCart: (state: IInitialCartState, item: ICartItem) => {
+      let updatedCartItems: ICartItem[] = [];
+
+      state.cartItems.forEach((currItem, i) => {
+        if (currItem.id === item.id) {
+          updatedCartItems = [...state.cartItems];
+          item.quantity
+            ? (updatedCartItems[i] = {
+                ...currItem,
+                quantity: item.quantity,
+              })
+            : updatedCartItems.splice(i, 1);
+        }
+      });
+
       update(store => ({
         ...store,
-        cartItems: removeItem(store, item),
+        cartItems: [...updatedCartItems],
       }));
     },
   };
-};
-
-const removeItem = (store: IInitialCartState, item: IMenu) => {
-  const newCartItems = [...store.cartItems];
-  console.log('removeitem', store);
-
-  const cartItemPosition = newCartItems.findIndex(({ id }) => item.id === id);
-  newCartItems.splice(cartItemPosition, 1);
-  console.log(newCartItems);
-  return newCartItems;
 };
 
 export const cartStore = createCartStore();
