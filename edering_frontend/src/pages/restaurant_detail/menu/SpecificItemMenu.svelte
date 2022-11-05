@@ -7,9 +7,8 @@
   import { onMount } from 'svelte';
   import { ApiRequestMethods, IFoodCategory } from 'types';
   import type { IMenu } from 'types/menu.types';
-  import AddRemoveItem from './components/AddRemoveItem.svelte';
+  import Item from './components/Item.svelte';
 
-  $: console.log('c_id', $params);
   $: cId = $params?.c_id;
   let isItemAddedToCart = false;
   let isLoading = false;
@@ -69,30 +68,9 @@
     <LoadingUI />
   {:else if menus.length > 0}
     <Box className="">
-      <!-- <h3 class="text-sm font-bold text-black-primary">Chicken</h3> -->
-      <!-- chicken items card container -->
       <Box className="space-y-2">
         {#each menus as item}
-          <Box flow="horizontal" className="bg-gray-primary rounded-3xl p-4 ">
-            <!-- <img
-              class="w-20 h-16 rounded-2xl"
-              src={item?.image_uri_id ?? ''}
-              alt=""
-            /> -->
-            <Box className="px-3 space-y-2 flex-1">
-              <h4 class="text-xs text-black-primary font-medium">
-                {item?.name}
-              </h4>
-              <Box flow="horizontal" align="center" justify="between">
-                <p class="text-xs text-yellow-primary font-medium">
-                  {item?.price}
-                </p>
-                <Box>
-                  <AddRemoveItem {item} />
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+          <Item {item} />
         {/each}
       </Box>
     </Box>

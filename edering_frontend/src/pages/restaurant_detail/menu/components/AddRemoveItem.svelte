@@ -1,42 +1,44 @@
 <script lang="ts">
   import Box from 'components/layouts/Box.svelte';
-  import { cartStore } from 'store/cart/cart.store';
+  import { cartStore, ICartItem } from 'store/cart/cart.store';
   import type { IMenu } from 'types/menu.types';
-  // import { cartStore } from 'store/cart/cart.store';
 
-  export let item: IMenu;
-  console.log('specificitem', item);
-
-  $: cartItemsQuantity = $cartStore.cartItems.length ?? 0;
+  export let item: IMenu | null = null;
+  export let cartPageItem: ICartItem | null = null;
   let showDecrementIcon = false;
-  $: itemCount = $cartStore.cartItems.filter(({ id }) => item.id === id).length;
 
-  $: console.log('itemCount', itemCount);
-
-  $: console.log(
-    'itemcountfromstore',
-    $cartStore.cartItems.filter(({ id }) => item.id === id).length
-  );
-
-  // export let incrementQuantity: () => void;
-  // export let decrementQuantity: () => void;
+  $: if (item) {
+    cartPageItem = {
+      ...item,
+      quantity: 0,
+    };
+  }
+  $: quantity =
+    $cartStore.cartItems.filter(currItem => currItem.id === cartPageItem?.id)[0]
+      ?.quantity ?? 0;
 
   const addItemToCart = () => {
-    // cartStore.inc;
-    itemCount++;
-    cartStore.addToCart(item);
+    if ($cartStore.isLoading) return;
+    quantity++;
+    cartPageItem = {
+      ...cartPageItem,
+      quantity,
+    };
+    cartStore.addToCart($cartStore, cartPageItem);
   };
 
   const removeItemFromCart = () => {
-    // cartStore.decrementQty();
-    if (itemCount < 1) return;
-    itemCount--;
-    cartStore.removeFromCart(item);
+    if ($cartStore.isLoading) return;
+    if (quantity < 1) return;
+    quantity--;
+    cartPageItem = {
+      ...cartPageItem,
+      quantity,
+    };
+    cartStore.removeFromCart($cartStore, cartPageItem);
   };
 
-  $: console.log('cartstore', $cartStore);
-
-  $: itemCount > 0 ? (showDecrementIcon = true) : (showDecrementIcon = false);
+  $: quantity > 0 ? (showDecrementIcon = true) : (showDecrementIcon = false);
 </script>
 
 <Box flow="horizontal" align="center" className="space-x-2">
@@ -48,7 +50,7 @@
       -
     </p>
     <p class="text-black-primary text-xs font-medium">
-      {itemCount}
+      {quantity}
     </p>
   {/if}
 

@@ -1,12 +1,21 @@
 import { writable } from 'svelte/store';
-import type { IMenu } from 'types';
+
+export interface ICartItem {
+  id?: string;
+  name?: string;
+  price?: string;
+  quantity?: number;
+  total?: number;
+}
 
 interface IInitialCartState {
-  cartItems: IMenu[];
+  cartItems: ICartItem[];
+  isLoading: boolean;
 }
 
 const initialCartState: IInitialCartState = {
   cartItems: [],
+  isLoading: false,
 };
 
 const createCartStore = () => {
@@ -15,30 +24,59 @@ const createCartStore = () => {
   return {
     set,
     subscribe,
-    addToCart: (item: IMenu) => {
+    addToCart: (state: IInitialCartState, item: ICartItem) => {
+      if (state.isLoading) return;
+
       update(store => ({
         ...store,
-        cartItems: [...store.cartItems, item],
+        isLoading: true,
+      }));
+
+      let updatedCartItems: ICartItem[] = [...state.cartItems];
+      let index = updatedCartItems.findIndex(
+        currItem => currItem.id === item.id
+      );
+
+      if (index >= 0) {
+        updatedCartItems[index] = item;
+      } else {
+        updatedCartItems = [...updatedCartItems, item];
+      }
+
+      update(store => ({
+        ...store,
+        isLoading: false,
+        cartItems: [...updatedCartItems],
       }));
     },
 
-    removeFromCart: (item: IMenu) => {
+    removeFromCart: (state: IInitialCartState, item: ICartItem) => {
+      if (state.isLoading) return;
       update(store => ({
         ...store,
-        cartItems: removeItem(store, item),
+        isLoading: true,
+      }));
+      let updatedCartItems: ICartItem[] = [];
+
+      state.cartItems.forEach((currItem, i) => {
+        if (currItem.id === item.id) {
+          updatedCartItems = [...state.cartItems];
+          item.quantity
+            ? (updatedCartItems[i] = {
+                ...currItem,
+                quantity: item.quantity,
+              })
+            : updatedCartItems.splice(i, 1);
+        }
+      });
+
+      update(store => ({
+        ...store,
+        isLoading: false,
+        cartItems: [...updatedCartItems],
       }));
     },
   };
-};
-
-const removeItem = (store: IInitialCartState, item: IMenu) => {
-  const newCartItems = [...store.cartItems];
-  console.log('removeitem', store);
-
-  const cartItemPosition = newCartItems.findIndex(({ id }) => item.id === id);
-  newCartItems.splice(cartItemPosition, 1);
-  console.log(newCartItems);
-  return newCartItems;
 };
 
 export const cartStore = createCartStore();
