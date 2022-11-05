@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
-import type { IMenu } from 'types';
 
 export interface ICartItem {
   id?: string;
   name?: string;
   price?: string;
   quantity?: number;
+  total?: number;
 }
 
 interface IInitialCartState {
