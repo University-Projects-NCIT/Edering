@@ -10,10 +10,12 @@ export interface ICartItem {
 
 interface IInitialCartState {
   cartItems: ICartItem[];
+  isLoading: boolean;
 }
 
 const initialCartState: IInitialCartState = {
   cartItems: [],
+  isLoading: false,
 };
 
 const createCartStore = () => {
@@ -23,33 +25,37 @@ const createCartStore = () => {
     set,
     subscribe,
     addToCart: (state: IInitialCartState, item: ICartItem) => {
-      console.log('state', state);
-      let updatedCartItems: ICartItem[] = [];
+      if (state.isLoading) return;
 
-      if (state.cartItems.length === 0) updatedCartItems = [item];
-
-      if (state.cartItems.length > 0) {
-        state.cartItems.forEach((currItem, i) => {
-          if (currItem.id === item.id) {
-            updatedCartItems = [...state.cartItems];
-            updatedCartItems[i] = {
-              ...currItem,
-              quantity: item.quantity,
-            };
-          } else {
-            updatedCartItems = [...state.cartItems, item];
-          }
-        });
-      }
-
-      console.log('updated', updatedCartItems);
       update(store => ({
         ...store,
+        isLoading: true,
+      }));
+
+      let updatedCartItems: ICartItem[] = [...state.cartItems];
+      let index = updatedCartItems.findIndex(
+        currItem => currItem.id === item.id
+      );
+
+      if (index >= 0) {
+        updatedCartItems[index] = item;
+      } else {
+        updatedCartItems = [...updatedCartItems, item];
+      }
+
+      update(store => ({
+        ...store,
+        isLoading: false,
         cartItems: [...updatedCartItems],
       }));
     },
 
     removeFromCart: (state: IInitialCartState, item: ICartItem) => {
+      if (state.isLoading) return;
+      update(store => ({
+        ...store,
+        isLoading: true,
+      }));
       let updatedCartItems: ICartItem[] = [];
 
       state.cartItems.forEach((currItem, i) => {
@@ -66,6 +72,7 @@ const createCartStore = () => {
 
       update(store => ({
         ...store,
+        isLoading: false,
         cartItems: [...updatedCartItems],
       }));
     },
