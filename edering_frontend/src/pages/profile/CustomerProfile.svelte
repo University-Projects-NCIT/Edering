@@ -17,8 +17,8 @@
 
 <Box className='flex flex-col'>
   <Box className="px-4">
-    <Box flow='horizontal' align='center'>
-      <h1 class="text-2xl font-bold pb-4 mt-6">Customer Profile</h1>
+    <Box className='flex'>
+      <h1 class=" flex-1 text-2xl font-bold pb-4 mt-6">Customer Profile</h1>
       <Box
         onClick={onLogout}
         className="bg-gray-primary p-2 rounded-full hover:cursor-pointer"
@@ -46,8 +46,8 @@
     <Box className=''>
       {#each orders as order}
         <Box>
-          <p class="text-sm inline">{order.order_to?.name}</p> <p class="inline text-sm">{dayjs(order.order_date_time ?? '').format('MMM D, YYYY (hh:mm A)')}</p>
-          <p class="text-sm block"> Cost: ${order.order_cost}</p>
+          <p class="text-sm inline font-bold pr-2">{order.order_to?.name}</p> <p class="inline text-xs">{dayjs(order.order_date_time ?? '').format('MMM D, YYYY (hh:mm A)')}</p>
+          <p class="text-sm block font-bold"> Cost: ${order.order_cost}</p>
         </Box>
         <Box className="h-4"/>
       {/each}
