@@ -12,27 +12,27 @@
   import Profile from '../../pages/profile/Profile.svelte';
   import ProviderForm from '../login/components/ProviderForm.svelte';
   import { onMount } from 'svelte';
-  import { getProvider, getCustomer} from '../../helper/dataRepository'
+  import { getProvider, getCustomer } from '../../helper/dataRepository';
   import CustomerProfile from 'pages/profile/CustomerProfile.svelte';
   import ProviderProfile from 'pages/profile/ProviderProfile.svelte';
 
   let showPrvForm = false;
 
   const unsubscribe = authState(auth).subscribe(user => {
-    if(user?.uid != null){
+    if (user?.uid != null) {
       getCustomer(user.uid).then(data => {
-        if(Object.keys(data).length != 0) {
-          customer.set(data)
-          if($userType == 'None'){
-            userType.set('Customer')
+        if (Object.keys(data).length != 0) {
+          customer.set(data);
+          if ($userType == 'None') {
+            userType.set('Customer');
           }
         }
       });
       getProvider(user.uid).then(data => {
-        if(Object.keys(data).length != 0){
-          provider.set(data)
-          if($userType == 'None'){
-            userType.set('Provider')
+        if (Object.keys(data).length != 0) {
+          provider.set(data);
+          if ($userType == 'None') {
+            userType.set('Provider');
           }
         }
       });
@@ -87,14 +87,14 @@
       method: ApiRequestMethods.post,
       data: updatedProvider,
     }).then(data => {
-      if(Object.keys(data).length != 0){
-        if(Object.keys(data).length != 0){
-            getProvider(userId).then( data => {
-              provider.set(data)
-              showPrvForm = false;
-            })
-          }
+      if (Object.keys(data).length != 0) {
+        if (Object.keys(data).length != 0) {
+          getProvider(userId).then(data => {
+            provider.set(data);
+            showPrvForm = false;
+          });
         }
+      }
     });
   };
 
@@ -106,7 +106,7 @@
       id: userId,
       name: $user_store.name,
       email: $user_store.email,
-      profile_image: $user_store.imageUrl
+      profile_image: $user_store.imageUrl,
     };
 
     request<ICustomer>({ url: cstUrl }).then(res => {
@@ -116,36 +116,36 @@
           method: ApiRequestMethods.post,
           data: updatedCustomer,
         }).then(data => {
-          if(Object.keys(data).length != 0){
-            getCustomer(userId).then( data => {
-              customer.set(data)
-            })
+          if (Object.keys(data).length != 0) {
+            getCustomer(userId).then(data => {
+              customer.set(data);
+            });
           }
-        })
+        });
       }
     });
   };
 
   // when you load or reload the page
   auth.onAuthStateChanged(async auth => {
-    console.log("User Type",$userType)
+    console.log('User Type', $userType);
     if ($userType == 'Provider') {
-      getProvider($user_store.id).then( data => {
-        if(Object.keys(data).length != 0){
-          provider.set(data)
+      getProvider($user_store.id).then(data => {
+        if (Object.keys(data).length != 0) {
+          provider.set(data);
         }
-      })
+      });
     }
     if ($userType == 'Customer') {
-      getCustomer($user_store.id).then( data => {
-        if(Object.keys(data).length != 0){
-          customer.set(data)
+      getCustomer($user_store.id).then(data => {
+        if (Object.keys(data).length != 0) {
+          customer.set(data);
         }
-      })
+      });
     }
     if (auth) {
       console.log('Loged in');
-      console.log("UserType==", $userType)
+      console.log('UserType==', $userType);
       if ($userType == 'Customer') {
         updateCst();
       }
@@ -158,17 +158,16 @@
       console.log('not logged in');
     }
   });
-
 </script>
 
 <Box>
   {#if $customer.id != '' && $userType == 'Customer'}
     <Box>
-      <CustomerProfile onLogout={logout}/>
+      <CustomerProfile onLogout={logout} />
     </Box>
   {:else if $provider.id != '' && $userType == 'Provider'}
     <Box>
-      <ProviderProfile/>
+      <ProviderProfile />
     </Box>
   {:else if showPrvForm}
     <Box>
@@ -180,19 +179,19 @@
     >
       <Box className="pt-8">
         <Box className="flex items-center justify-center mb-6 p-2">
-          <img class="py-4 px-2" src = {'/icons/edering.png'} alt = "logo"/>
+          <img class="py-4 px-2" src={'/icons/Edering.png'} alt="logo" />
         </Box>
 
-        <Box 
+        <Box
           onClick={() => {
             userType.set('Customer');
           }}
-          className="{ $userType == 'Customer'
+          className="{$userType == 'Customer'
             ? 'bg-color1-orange1'
-            : 'bg-transparent'
-          }
+            : 'bg-transparent'}
           border-color1-blueText flex items-center justify-center h-10 max-w-md mx-8
-            rounded-full text-center content-center border-2">
+            rounded-full text-center content-center border-2"
+        >
           <p class="text-color1-blueText">Login as a Customer</p>
         </Box>
 
@@ -210,7 +209,9 @@
         </Box>
 
         <Box className="flex items-center justify-center mt-10">
-          <Box className="w-40 h-40 bg-[url('/icons/placeholder.png')] bg-cover" />
+          <Box
+            className="w-40 h-40 bg-[url('/icons/placeholder.png')] bg-cover"
+          />
         </Box>
         <Box
           onClick={login}
