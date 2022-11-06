@@ -13,6 +13,8 @@
   import ProviderForm from '../login/components/ProviderForm.svelte';
   import { onMount } from 'svelte';
   import { getProvider, getCustomer} from '../../helper/dataRepository'
+  import CustomerProfile from 'pages/profile/CustomerProfile.svelte';
+  import ProviderProfile from 'pages/profile/ProviderProfile.svelte';
 
   let showPrvForm = false;
 
@@ -162,18 +164,11 @@
 <Box>
   {#if $customer.id != '' && $userType == 'Customer'}
     <Box>
-      <Box>
-        <h1>Customer Profile</h1>
-        <Profile onLogout={logout} />
-      </Box>
+      <CustomerProfile onLogout={logout}/>
     </Box>
   {:else if $provider.id != '' && $userType == 'Provider'}
     <Box>
-      <Box>
-        <h1>Provider Profile</h1>
-        <Profile onLogout={logout} />
-        <Box on:click={() => logout()}>Log out</Box>
-      </Box>
+      <ProviderProfile/>
     </Box>
   {:else if showPrvForm}
     <Box>
