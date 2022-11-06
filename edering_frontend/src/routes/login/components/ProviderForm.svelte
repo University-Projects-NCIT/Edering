@@ -1,6 +1,7 @@
 <script lang="ts">
   import Box from 'components/layouts/Box.svelte';
   import { providerForm } from 'store';
+  import { storage } from 'config/conn_firebase';
 
   let avatar, fileinput;
 
@@ -20,30 +21,54 @@
     updatePrv();
   };
 
-  const uploadImage = () => {
-    // storageRef.put(file).then(() => {
-    // firebase.storage().ref("users").child(user.uid).getDownloadURL()
-    //   .then((downloadURL) => {
-    //   }
-    // }
-  };
-
-  const onFileSelected = e => {
+  const onFileSelected = async e => {
     let image = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(image);
-    reader.onload = e => {
-      //  providerForm.set({
-      //   name: $providerForm.name,
-      //   location: $providerForm.location,
-      //   image_id: e.target?.result,
-      //   known_for: $providerForm.known_for,
-      //   close_time: $providerForm.close_time,
-      //   open_time: $providerForm.open_time,
-      //   created_at: $providerForm.created_at
-      //  })
-    };
+    handleUploadImage(image,e.target.name)
+  }
+  
+  const handleUploadImage = async (file,name) => {
+    const imageSizeMB = file.size / 1024 / 1024;
+    
+    if (imageSizeMB > 3){
+      return alert(" File size can not be more than 3 MB. Please compress you image and upload again !");
+    }
+     
+    const image_name = file.name;
+    const timestamp = String(Math.round(new Date().getTime()/1000))
+    const uploadTask = storage.ref(`${name}/${timestamp+image_name}`).put(file);
+    let downloadableUrl: string = '' 
+    
+    uploadTask.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage
+        .ref(name)
+        .child(timestamp + image_name)
+        .getDownloadURL()
+        .then(url => {
+          downloadableUrl = url 
+          console.log("downloadable url", url)
+          providerForm.set({
+          name: $providerForm.name,
+          location: $providerForm.location,
+          image_id: url,
+          known_for: $providerForm.known_for,
+          close_time: $providerForm.close_time,
+          open_time: $providerForm.open_time,
+          created_at: $providerForm.created_at
+        });
+      })
+    })
+
+
   };
+  
 </script>
 
 <Box>
@@ -52,7 +77,27 @@
       <h1 class="w-full font-bold text-lg text-center">Update Provider</h1>
     </div>
     <form on:submit|preventDefault={onSubmit} class="px-4 overflow-y-scroll">
-      <label for="name" class="text-sm pb-2"> Name* </label>
+      <Box className="pb-2">
+        <img class="w-20 h-20 rounded-md mb-2 m-auto" 
+          src={$providerForm.image_id != '' ? $providerForm.image_id : '/icons/default-image.jpg'}
+          alt = ""/>
+        <img
+          class="upload w-10 h-10 m-auto"
+          src="https://static.thenounproject.com/png/625182-200.png"
+          alt=""
+          on:click={() => {
+            fileinput.click();
+          }}
+        />
+        <input
+          style="display:none"
+          type="file"
+          accept=".jpg, .jpeg, .png"
+          on:change={e => onFileSelected(e)}
+          bind:this={fileinput}
+        />
+      </Box>
+      <label for="name" class="text-sm pb-2 mt-2"> Name* </label>
       <input
         class="border border-gray-300 inline appearance-none rounded w-full p-2
           leading-tight focus:outline-none text-sm pb-2"
@@ -91,7 +136,7 @@
           leading-tight focus:outline-none text-sm pb-2"
         id="open_time"
         placeholder="Enter open time"
-        type="text"
+        type="time"
         bind:value={$providerForm.open_time}
       />
 
@@ -102,31 +147,8 @@
           leading-tight focus:outline-none text-sm pb-2"
         id="close_time"
         placeholder="Enter close time"
-        type="text"
+        type="time"
         bind:value={$providerForm.close_time}
-      />
-
-      <div class="py-2" />
-      <img
-        class="upload w-12 h-12 inline"
-        src="https://static.thenounproject.com/png/625182-200.png"
-        alt=""
-        on:click={() => {
-          fileinput.click();
-        }}
-      />
-      <span
-        class="chan text-sm pl-2"
-        on:click={() => {
-          fileinput.click();
-        }}>Choose Image</span
-      >
-      <input
-        style="display:none"
-        type="file"
-        accept=".jpg, .jpeg, .png"
-        on:change={e => onFileSelected(e)}
-        bind:this={fileinput}
       />
 
       <div class="py-4" />
@@ -136,6 +158,7 @@
         >Submit</button
       >
     </form>
+    <div class="h-16"></div>
   </div>
 </Box>
 

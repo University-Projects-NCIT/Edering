@@ -15,9 +15,7 @@
 
 <Box className="px-2 py-4">
   <Box flow="horizontal" align="center">
-    <h1
-      class="text-black-primary font-medium text-sm w-full  flex  justify-center "
-    >
+    <h1 class="text-black-primary font-medium text-sm w-full  flex  justify-center ">
       Profile
     </h1>
     <Box

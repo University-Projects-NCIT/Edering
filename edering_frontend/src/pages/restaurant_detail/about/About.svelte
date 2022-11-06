@@ -2,8 +2,8 @@
   import { LoadingUI } from 'components';
   import Box from 'components/layouts/Box.svelte';
   import StarRating from 'svelte-star-rating';
-  import type { IHotel } from 'types';
-  export let restaurant: IHotel;
+  import type { IProvider } from 'types';
+  export let restaurant: IProvider;
 </script>
 
 {#if restaurant}

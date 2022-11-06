@@ -2,12 +2,11 @@
   import type { IMessage } from "types";
 
     export let msg: IMessage  
-    const date = new Date(msg.createdAt) 
-    const hour = date.getHours()
-    const min = date.getMinutes()
+    const date = msg.createdAt ? new Date(msg.createdAt) : new Date() 
 </script>
 
-<div class="rounded-tr-lg rounded-tl-lg w-full rounded-bl-lg px-3 py-1 bg-gray-primary">
+<div class="rounded-tr-xl rounded-tl-xl w-full rounded-bl-xl px-3 py-1 bg-gray-primary w-max-con table-caption"
+  style="width: auto; display: inline-block; float: right;">
   <p class="text-sm w-full pb-1"> {msg.msg} </p>
-  <p style="font-size: 8px;"> {hour}:{min} </p>
+  <p class = "" style="font-size: 8px;"> {date.toLocaleString()} </p>
 </div>
