@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { params } from '@roxi/routify';
+  import { params, goto } from '@roxi/routify';
   import Input from 'components/input_components/Input.svelte';
   import Box from 'components/layouts/Box.svelte';
   import LoadingUI from 'components/loading/LoadingUI.svelte';
@@ -15,14 +15,16 @@
   import { RestaurantDetailTab } from './restaurantRoute';
   import About from './about/About.svelte';
   import type { IListOfResturants, IProvider } from 'types';
+  import Body from 'components/typography/Body.svelte';
+  import { userType, user_store } from 'store';
 
   $: restaurantId = $params?.restaurant_id;
   $: activeTab = $params?.active_tab;
   let isLoading = true;
   let restaurant: IListOfResturants;
 
-  function onClickOrder(){
-
+  const onClickChatBtn = () => {
+    $goto(`/chat/?senderId=${$user_store.id}&&receiverId=${restaurantId}`)
   }
 
   onMount(async () => {
@@ -62,6 +64,11 @@
 
 {#if restaurant}
   <Box className="pb-20">
+    {#if $userType == 'Customer'}
+      <Box className="fixed bottom-14 right-4">
+        <img on:click ={onClickChatBtn} src={'/icons/chatBtn.svg'} alt=''>
+      </Box>
+    {/if}
     <!-- <img class="banner-img w-full" src={restaurant.image_uri_id} alt="" /> -->
     <Box className="p-2">
       <RestaurantCard restaurantData={restaurant} />
@@ -85,10 +92,6 @@
         <Comment />
       </TabsMainPage>
     </Box>
-
-    <div class="left-1 bottom-1 sticky">
-      <img on:click ={onClickOrder} src={'/icons/order.png'} alt=''>
-    </div>
   </Box>
 {:else}
   <LoadingUI />

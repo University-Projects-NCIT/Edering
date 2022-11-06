@@ -45,8 +45,8 @@
 
 </script>
 
-<Box className=" text-yellow-50 p-4">
-  <Box className="rounded-2xl bg-gradient-to-r m-2 p-2
+<Box className=" text-yellow-50 px-4 py-2">
+  <Box className="rounded-2xl bg-gradient-to-r mx-2 p-2
    from-indigo-500 via-purple-500 to-pink-500">
     <Box className="pb-2 w-full">
       <h1 class="pb-2 pt-1 text-xl w-full text-center">Order summery</h1>

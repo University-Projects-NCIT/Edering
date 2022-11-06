@@ -2,8 +2,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { getAuth } from 'firebase/auth';
 import 'firebase/compat/firestore';
-import envData from './envData';
 import 'firebase/compat/storage';
+import envData from './envData';
 
 const app = firebase.initializeApp(envData.firebase);
 // if (!firebase.app.length) {
