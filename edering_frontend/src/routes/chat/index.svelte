@@ -206,7 +206,7 @@
           alt=""/>
         <p class="text-sm inline text-black-primary">{receiverName}</p>
     </div>
-    <Box className="pb-24">
+    <Box className="">
       <div bind:this={msgElement} style="height:600px;overflow:scroll;">
         {#each msgData as msg, index}
         {#if index == 0}
@@ -231,7 +231,7 @@
         {/if}
         {/each}
       </div>
-      <Box className="h-24" />
+      <Box className="h-20" />
     </Box>
     <Box className="flex justify-items-center items-center fixed
       bottom-10 bg-gray-primary w-screen">
