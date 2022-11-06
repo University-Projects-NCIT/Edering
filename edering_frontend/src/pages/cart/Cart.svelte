@@ -35,7 +35,7 @@
 <Modal {display} closeButtonSize="small" onModalClose={() => (display = false)}>
   <Box slot="form-section" className="p-6">
     <h2 class="text-sm text-black-primary">
-      Are you sure you want confirm the order?
+      Are you sure you want to confirm the order?
     </h2>
     <Box justify="around" className="pt-8">
       <BarLoading isLoading={isOrdering}>
