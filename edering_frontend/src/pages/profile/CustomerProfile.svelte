@@ -1,17 +1,16 @@
-<script lang='ts'>
+<script lang="ts">
   import Box from 'components/layouts/Box.svelte';
   import { customer } from 'store';
   import type { IOrder } from 'types';
   import dayjs from 'dayjs';
 
-  export let onLogout = () => {}
+  export let onLogout = () => {};
 
-  $: orders  = $customer.customer_order  ?? []
+  $: orders = $customer.customer_order ?? [];
 
   const onClickHistory = () => {
-      //goto history 
-  }
-
+    //goto history
+  };
 </script>
 
 <Box className='flex flex-col h-screen'>
@@ -25,8 +24,8 @@
         <img class="w-8 h-8" src="/icons/logout.svg" alt="" />
       </Box>
     </Box>
-    <Box flow='horizontal'>
-      <img 
+    <Box flow="horizontal">
+      <img
         class="inline h-20 w-20 rounded-lg"
         src = { $customer.profile_image }
         alt=""/>
@@ -37,7 +36,12 @@
         <h1 class="text-sm font-medium">Total scans: {$customer.user_scan?.length}</h1>
       </Box>  
     </Box>
-    <Box flow='horizontal' justify='center' onClick={onClickHistory} className="p-4 rounded-xl mt-8 w-full bg-gray-primary">
+    <Box
+      flow="horizontal"
+      justify="center"
+      onClick={onClickHistory}
+      className="p-4 rounded-xl mt-8 w-full bg-gray-primary"
+    >
       <h1 class="text-md font-bold">Analyse History</h1>
     </Box>
   </Box>
@@ -48,7 +52,7 @@
           <p class="text-sm inline font-bold pr-2">{order.order_to?.name}</p> <p class="inline text-xs">{dayjs(order.order_date_time ?? '').format('MMM D, YYYY (hh:mm A)')}</p>
           <p class="text-sm block font-bold"> Cost: ${order.order_cost}</p>
         </Box>
-        <Box className="h-4"/>
+        <Box className="h-4" />
       {/each}
     </Box>
   </Box>

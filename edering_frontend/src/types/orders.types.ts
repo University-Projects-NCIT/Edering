@@ -4,6 +4,9 @@ export enum OrderStatus {
 
 export interface IOrderFrom {
   id?: string;
+  name?: string;
+  email?: string;
+  profile_image?: string;
 }
 
 export interface IOrderTo {
@@ -20,7 +23,7 @@ export interface IOrderTo {
 export interface IOrder {
   id?: string;
   food_name?: string;
-  food_count?: string;
+  food_count?: number;
   order_date_time?: string;
   order_status?: OrderStatus;
   order_cost?: string;

@@ -2,8 +2,8 @@
   import { LoadingUI } from 'components';
   import Box from 'components/layouts/Box.svelte';
   import StarRating from 'svelte-star-rating';
-  import type { IProvider } from 'types';
-  export let restaurant: IProvider;
+  import type { IListOfResturants, IProvider } from 'types';
+  export let restaurant: IListOfResturants;
 </script>
 
 {#if restaurant}
@@ -29,7 +29,10 @@
     <Box className="bg-gray-primary rounded-2xl p-4 ">
       <Box>
         <h3 class="text-sm font-medium mb-2">Rating</h3>
-        <StarRating rating={3} config={{ size: 10, fullColor: '#FFA800' }} />
+        <StarRating
+          rating={restaurant.rating ?? 0}
+          config={{ size: 10, fullColor: '#FFA800' }}
+        />
       </Box>
     </Box>
   </Box>

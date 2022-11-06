@@ -7,7 +7,9 @@
   import Modal from 'components/modal/Container.svelte';
   import { request } from 'helper';
   import { onMount } from 'svelte';
-  import { ApiRequestMethods, IComment } from 'types';
+  import { ApiRequestMethods, IComment, IRating } from 'types';
+  import { user_store } from 'store';
+  import StarRating from 'svelte-star-rating';
 
   $: console.log('params', $params);
   $: pId = $params.restaurant_id;
@@ -15,6 +17,7 @@
   let index;
   let reviewInput = '';
   let comments: IComment[] = [];
+  let ratings: IRating[] = [];
   let isLoading = false;
   const arr = [1, 2, 3, 4, 5];
 
@@ -24,7 +27,69 @@
     index = i;
   };
 
-  const handleReviewWithRating = () => {};
+  const postReview = async () => {
+    // review
+    const response = await request<IComment>({
+      url: '/comments/',
+      method: ApiRequestMethods.post,
+      data: {
+        id: 'adf',
+        content: reviewInput,
+        comment_from: {
+          id: $user_store.id,
+        },
+        comment_to: {
+          id: pId,
+        },
+      },
+    });
+
+    console.log('postreviewresponse', response);
+  };
+
+  const postRating = async () => {
+    // rating
+  };
+
+  const handleReviewWithRating = async () => {
+    await postReview();
+    await postRating();
+  };
+
+  interface IRatingWithReviewData {
+    name?: string;
+    rating?: string;
+    img_url?: string;
+    reviewText?: string;
+    reviewerId?: string;
+    reviewDate?: string;
+  }
+
+  let ratingWithReviewData: IRatingWithReviewData[] = [];
+
+  const prepareRatingWithReviewData = () => {
+    ratingWithReviewData = comments.map(comment => {
+      return {
+        name: comment.comment_from?.name,
+        img_url: comment.comment_from?.profile_image,
+        reviewText: comment.content,
+        reviewerId: comment.comment_from?.id,
+        reviewDate: comment.created_at,
+      };
+    });
+
+    ratings.map(rating => {
+      if (ratingWithReviewData.length > 0) {
+        ratingWithReviewData.forEach((item, i) => {
+          if (item.reviewerId === rating.rating_from?.id) {
+            ratingWithReviewData[i].rating = rating.rating;
+          }
+        });
+      }
+    });
+  };
+
+  $: console.log('ratingwithreviewdata', ratingWithReviewData);
 
   onMount(async () => {
     isLoading = true;
@@ -32,13 +97,28 @@
       url: `/comments/?provider_id=${pId}`,
       method: ApiRequestMethods.get,
     });
-    isLoading = false;
+
+    const ratingResponse: IRating[] = await request({
+      url: `/ratings/?provider_id=${pId}`,
+      method: ApiRequestMethods.get,
+    });
+
     if (response && response.length > 0) {
       comments = response;
+      console.log('commeenntts', comments);
     }
+    if (ratingResponse && ratingResponse.length > 0) {
+      ratings = ratingResponse;
+      console.log('ratingssss', ratings);
+    }
+
+    prepareRatingWithReviewData();
+    isLoading = false;
   });
 
   $: console.log('comments', comments);
+
+  $: console.log('userstre', $user_store);
 </script>
 
 <Modal {display} closeButtonSize="small" onModalClose={() => (display = false)}>
@@ -83,40 +163,48 @@
       />
       <Box flow="horizontal" justify="end" className="pt-1">
         <Button
-          on:click={() => (display = true)}
+          on:click={() => {
+            display = true;
+          }}
           size="small"
           type="filled"
           buttonEventType="submit">Add Rating</Button
         >
       </Box>
-      {#if comments.length > 0}
-        {#each comments as comment}
+      {#if ratingWithReviewData.length > 0}
+        {#each ratingWithReviewData as data}
           <Box
             flow="horizontal"
-            className="mt-4 bg-gray-primary p-1 rounded-xl text-black-primary"
+            className="mt-4 bg-gray-primary p-2 rounded-xl text-black-primary"
           >
             <img
-              src={comment.comment_from?.profile_image}
-              class="mx-2 w-10 h-10 rounded-full"
+              src={data.img_url || '/icons/user.svg'}
+              class="h-8 rounded-full"
               alt="user"
             />
             <Box className="pl-2 ">
               <h3 class="flex items-center font-bold">
-                {comment.comment_from?.name || 'No name'}
-                <span style="color: #ccc;" class=" font-bold text-xs ml-1"
-                  >{dayjs(comment.created_at).format(
+                {data.name?.split(' ')[0] || 'Unknown'}
+                <span style="color: #aba9a9;" class=" font-bold text-xs ml-1"
+                  >{dayjs(data.reviewDate).format(
                     'MMM D, YYYY (hh:mm A)'
                   )}</span
                 >
               </h3>
+              <Box>
+                <StarRating
+                  config={{ size: 10, fullColor: '#FFA800' }}
+                  rating={Number(data.rating ?? 0)}
+                />
+              </Box>
               <p class="text-xs">
-                {comment.content}
+                {data.reviewText}
               </p>
             </Box>
           </Box>
         {/each}
       {:else}
-        <p>No comments</p>
+        <p class="text-center mt-4 text-yellow-primary">No Review Found...</p>
       {/if}
     </form>
   </Box>

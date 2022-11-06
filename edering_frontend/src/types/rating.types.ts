@@ -2,12 +2,15 @@ export interface IRating {
   id?: number;
   rating?: string;
   created_at?: string;
-  from_id?: IRatingFrom;
-  to_id: IRatingTo;
+  rating_from?: IRatingFrom;
+  rating_to: IRatingTo;
 }
 
 export interface IRatingFrom {
   id?: string;
+  name?: string;
+  email?: string;
+  profile_image?: string;
 }
 
 export interface IRatingTo {
