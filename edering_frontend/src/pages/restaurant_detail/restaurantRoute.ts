@@ -2,7 +2,7 @@ export enum RestaurantDetailTab {
   Menu = 'MENU',
   About = 'ABOUT',
   Chat = 'CHAT',
-  Comment = 'COMMENT',
+  Review = 'REVIEW',
 }
 
 export class restaurantDetailRoute {
