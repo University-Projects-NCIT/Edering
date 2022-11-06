@@ -168,7 +168,7 @@
     </Box>
   {:else if $provider.id != '' && $userType == 'Provider'}
     <Box>
-      <ProviderProfile/>
+      <ProviderProfile onLogout= {logout} onEditProvider={() => showPrvForm = true }/>
     </Box>
   {:else if showPrvForm}
     <Box>
@@ -180,7 +180,7 @@
     >
       <Box className="pt-8">
         <Box className="flex items-center justify-center mb-6 p-2">
-          <img class="py-4 px-2" src = {'/icons/edering.png'} alt = "logo"/>
+          <img class="py-4 px-2" src = {'/icons/Edering.png'} alt = "logo"/>
         </Box>
 
         <Box 

@@ -2,8 +2,7 @@
   import Box from 'components/layouts/Box.svelte';
   import { customer } from 'store';
   import type { IOrder } from 'types';
-  import dayjs from 'dayjs'
-  import BarLoader from 'svelte-loading-spinners/dist/ts/BarLoader.svelte';
+  import dayjs from 'dayjs';
 
   export let onLogout = () => {}
 
@@ -15,15 +14,15 @@
 
 </script>
 
-<Box className='flex flex-col'>
+<Box className='flex flex-col h-screen'>
   <Box className="px-4">
-    <Box className='flex'>
-      <h1 class=" flex-1 text-2xl font-bold pb-4 mt-6">Customer Profile</h1>
+    <Box className='flex w-full items-center pb-4'>
+      <h1 class="flex-1 text-2xl font-bold mt-6">Customer Profile</h1>
       <Box
         onClick={onLogout}
-        className="bg-gray-primary p-2 rounded-full hover:cursor-pointer"
+        className="flex justify-center items-center bg-gray-primary w-8 h-8 p-2 rounded-full hover:cursor-pointer"
       >
-        <img class="w-4" src="/icons/logout.svg" alt="" />
+        <img class="w-8 h-8" src="/icons/logout.svg" alt="" />
       </Box>
     </Box>
     <Box flow='horizontal'>
@@ -32,17 +31,17 @@
         src = { $customer.profile_image }
         alt=""/>
       <Box flow='vertical' className="pl-4">
-        <h1 class="text-sm">{$customer.name}</h1>
-        <h1 class="text-sm">{$customer.email}</h1>
-        <h1 class="text-sm">Total orders: {$customer.customer_order?.length}</h1>
-        <h1 class="text-sm">Total scans: {$customer.user_scan?.length}</h1>
+        <h1 class="text-sm font-medium">{$customer.name}</h1>
+        <h1 class="text-sm font-medium">{$customer.email}</h1>
+        <h1 class="text-sm font-medium">Total orders: {$customer.customer_order?.length}</h1>
+        <h1 class="text-sm font-medium">Total scans: {$customer.user_scan?.length}</h1>
       </Box>  
     </Box>
     <Box flow='horizontal' justify='center' onClick={onClickHistory} className="p-4 rounded-xl mt-8 w-full bg-gray-primary">
       <h1 class="text-md font-bold">Analyse History</h1>
     </Box>
   </Box>
-  <Box className='flex-1 bg-gray-primary rounded-tr-xl rounded-tl-xl p-4 mt-8'>
+  <Box className='flex-grow bg-gray-primary rounded-tr-xl rounded-tl-xl p-4 mt-8'>
     <Box className=''>
       {#each orders as order}
         <Box>
