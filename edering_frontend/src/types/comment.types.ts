@@ -1,5 +1,8 @@
 export interface ICommentFrom {
   id?: string;
+  name?: string;
+  email?: string;
+  profile_image?: string;
 }
 
 export interface ICommentTo {
