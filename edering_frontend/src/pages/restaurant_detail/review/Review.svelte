@@ -79,11 +79,13 @@
     });
 
     ratings.map(rating => {
-      ratingWithReviewData.forEach((item, i) => {
-        if (item.reviewerId === rating.from_id?.id) {
-          ratingWithReviewData[i].rating = rating.rating;
-        }
-      });
+      if (ratingWithReviewData.length > 0) {
+        ratingWithReviewData.forEach((item, i) => {
+          if (item.reviewerId === rating.rating_from?.id) {
+            ratingWithReviewData[i].rating = rating.rating;
+          }
+        });
+      }
     });
   };
 
@@ -103,9 +105,11 @@
 
     if (response && response.length > 0) {
       comments = response;
+      console.log('commeenntts', comments);
     }
     if (ratingResponse && ratingResponse.length > 0) {
       ratings = ratingResponse;
+      console.log('ratingssss', ratings);
     }
 
     prepareRatingWithReviewData();
@@ -180,8 +184,8 @@
             />
             <Box className="pl-2 ">
               <h3 class="flex items-center font-bold">
-                {data.name || 'Unknown'}
-                <span style="color: #ccc;" class=" font-bold text-xs ml-1"
+                {data.name?.split(' ')[0] || 'Unknown'}
+                <span style="color: #aba9a9;" class=" font-bold text-xs ml-1"
                   >{dayjs(data.reviewDate).format(
                     'MMM D, YYYY (hh:mm A)'
                   )}</span
@@ -200,7 +204,7 @@
           </Box>
         {/each}
       {:else}
-        <p>No comments</p>
+        <p class="text-center mt-4 text-yellow-primary">No Review Found...</p>
       {/if}
     </form>
   </Box>

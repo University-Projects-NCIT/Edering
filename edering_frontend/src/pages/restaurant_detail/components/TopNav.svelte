@@ -11,7 +11,7 @@
     RestaurantDetailTab.Menu,
     RestaurantDetailTab.About,
     RestaurantDetailTab.Chat,
-    RestaurantDetailTab.Comment,
+    RestaurantDetailTab.Review,
   ];
 
   $: activeTab = $params?.active_tab as string;
