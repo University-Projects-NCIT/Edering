@@ -3,6 +3,7 @@
   import { customer, provider } from 'store';
   import type { IOrder } from 'types';
   import dayjs from 'dayjs';
+  import { goto } from '@roxi/routify';
 
   export let onLogout = () => {}
 
@@ -10,7 +11,9 @@
       //goto history 
   }
 
-  export let onEditProvider = () => {  }
+  const onEditProvider = () => { 
+    $goto("/editprovider");
+  }
   const onEditMenu = () => {  }
   const onEditHistory = () => {  }
 

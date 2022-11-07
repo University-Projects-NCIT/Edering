@@ -10,7 +10,9 @@
   export let customerId;
 
   // receive msg format as= "C Momo-2,Buff Momo-3,Chicken Chowmen-4,Burge-4"
-  const msgSplit1 = msg.msg?.split(",") ?? []
+  const orderMsg1 = msg.msg?.split(">") ?? []
+  const msgSplit1 = orderMsg1[0]?.split(",") ?? []
+  const orderTableNo = orderMsg1[1] ?? []
   let orderItems: string[][] = []
   msgSplit1.forEach( (oMsg) => {
     orderItems = [...orderItems,oMsg.split('-')]
@@ -59,6 +61,7 @@
         <p>{item[1]}</p>
       </Box>
       {/each}
+      <h1>Table no = {orderTableNo}</h1>
     </Box>
 
     {#if $userType == 'Customer'}
