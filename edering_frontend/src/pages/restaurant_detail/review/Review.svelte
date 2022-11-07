@@ -10,6 +10,7 @@
   import { ApiRequestMethods, IComment, IRating } from 'types';
   import { user_store } from 'store';
   import StarRating from 'svelte-star-rating';
+  import BarLoading from 'components/loading/BarLoading.svelte';
 
   $: console.log('params', $params);
   $: pId = $params.restaurant_id;
@@ -19,6 +20,7 @@
   let comments: IComment[] = [];
   let ratings: IRating[] = [];
   let isLoading = false;
+  let isAddingReview = false;
   const arr = [1, 2, 3, 4, 5];
 
   $: console.log('review', reviewInput);
@@ -29,18 +31,13 @@
 
   const postReview = async () => {
     // review
-    const response = await request<IComment>({
+    const response: IComment = await request({
       url: '/comments/',
       method: ApiRequestMethods.post,
       data: {
-        id: 'adf',
         content: reviewInput,
-        comment_from: {
-          id: $user_store.id,
-        },
-        comment_to: {
-          id: pId,
-        },
+        comment_from: $user_store.id,
+        comment_to: pId,
       },
     });
 
@@ -49,11 +46,31 @@
 
   const postRating = async () => {
     // rating
+    const response: IRating = await request({
+      url: '/ratings/',
+      method: ApiRequestMethods.post,
+      data: {
+        rating: index,
+        rating_from: $user_store.id,
+        rating_to: pId,
+      },
+    });
+
+    console.log('postratingresponse', response);
   };
 
   const handleReviewWithRating = async () => {
+    if (reviewInput.trim() === '' || !index) {
+      alert("Can't left the review and rating empty");
+      display = false;
+      return;
+    }
+    isAddingReview = true;
     await postReview();
     await postRating();
+    isAddingReview = false;
+    window.location.reload();
+    display = false;
   };
 
   interface IRatingWithReviewData {
@@ -144,7 +161,9 @@
         {/each}
       </div>
       <Box>
-        <Button on:click={handleReviewWithRating} size="small">Submit</Button>
+        <BarLoading isLoading={isAddingReview}>
+          <Button on:click={handleReviewWithRating} size="small">Submit</Button>
+        </BarLoading>
       </Box>
     </Box>
   </Box>

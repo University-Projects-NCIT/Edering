@@ -9,7 +9,7 @@
   import type { IMenu } from 'types/menu.types';
   import Item from './components/Item.svelte';
 
-  $: cId = $params?.c_id;
+  $: pId = $params?.p_id;
   let isItemAddedToCart = false;
   let isLoading = false;
   let foodCategory: IFoodCategory;
@@ -21,13 +21,12 @@
     : (isItemAddedToCart = false);
 
   onMount(async () => {
-    if (!cId) {
-      alert('no food category id');
+    if (!pId) {
       return;
     }
     isLoading = true;
     const response: IFoodCategory[] = await request({
-      url: `/food_categories/?id=${cId}`,
+      url: `/food_categories/?provider_id=${pId}`,
       method: ApiRequestMethods.get,
     });
     isLoading = false;
@@ -40,7 +39,7 @@
   });
 
   const handleClickOnCart = () => {
-    $goto('/cart');
+    $goto(`/cart?p_id=${pId}`);
   };
 </script>
 

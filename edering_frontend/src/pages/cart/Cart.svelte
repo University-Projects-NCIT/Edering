@@ -3,33 +3,78 @@
   import Box from 'components/layouts/Box.svelte';
   import AddRemoveItem from 'pages/restaurant_detail/menu/components/AddRemoveItem.svelte';
   import Modal from 'components/modal/Container.svelte';
-  import { cartStore } from 'store';
+  import { cartStore, user_store } from 'store';
   import BarLoading from 'components/loading/BarLoading.svelte';
+  import { ApiRequestMethods, IOrder, OrderStatus } from 'types';
+  import { request } from 'helper';
+  import { goto, params } from '@roxi/routify';
 
+  $: pId = $params?.p_id;
   $: cartItems = $cartStore.cartItems;
   let currentTotal = 0;
   let isOrdering = false;
   let display = false;
+
+  let tableNumber;
 
   $: newCartItems = cartItems.map(item => {
     item.total = Number(item.price) * Number(item.quantity);
     return item;
   });
 
+  $: userId = $user_store.id;
+
   const calculateTotal = () => {
     currentTotal = 0;
     newCartItems.forEach(item => (currentTotal += item.total ?? 0));
   };
 
-  const makeOrder = () => {
+  let orderMessage = '';
+
+  const makeOrder = async () => {
     // api request
+
+    newCartItems.forEach(async item => {
+      const response: IOrder = await request({
+        url: '/orders/',
+        method: ApiRequestMethods.post,
+        data: {
+          food_name: item.name,
+          food_count: item.quantity,
+          order_cost: item.total,
+          order_from: userId,
+          order_to: pId,
+          order_status: OrderStatus.Ordered,
+        },
+      });
+      if (response) {
+        orderMessage += `${response.food_name}-${response.food_count},`;
+      }
+    });
   };
 
-  const handleOrder = () => {
-    makeOrder();
+  $: console.log('ordermsg', orderMessage);
+
+  const handleOrder = async () => {
+    isOrdering = true;
+
+    await makeOrder();
+
+    setTimeout(() => {
+      orderMessage = `${orderMessage.slice(
+        0,
+        -1
+      )}>${tableNumber}&senderId=${userId}&receiverId=${pId}`;
+      isOrdering = false;
+      display = false;
+      tableNumber = '';
+      $goto(`/chat?order_msg=${orderMessage}`);
+    }, 800);
   };
 
   $: newCartItems, calculateTotal();
+
+  $: console.log('tableeeeeeee', tableNumber);
 </script>
 
 <Modal {display} closeButtonSize="small" onModalClose={() => (display = false)}>
@@ -104,9 +149,29 @@
         <p class="text-yellow-primary text-lg font-bold">{currentTotal}</p>
       </Box>
 
+      <Box
+        flow="horizontal"
+        align="center"
+        className="bg-gray-primary mt-4 rounded-full text-xs border-2 focus-within:border-yellow-primary focus:outline-none focus:ring-transparent border-gray-primary"
+      >
+        <input
+          bind:value={tableNumber}
+          class="bg-gray-primary text-black-primary px-3 py-2 w-full rounded-full border-0 focus:placeholder-transparent focus:outline-none focus:ring-transparent"
+          type="text"
+          placeholder="Enter table number..."
+        />
+      </Box>
+
       <Box className="flex justify-center mt-4">
-        <Button on:click={() => (display = true)} size="medium"
-          >Confirm Order</Button
+        <Button
+          on:click={() => {
+            if ((tableNumber?.trim()?.length ?? 0) === 0) {
+              alert('must provide table number');
+              return;
+            }
+            display = true;
+          }}
+          size="medium">Confirm Order</Button
         >
       </Box>
     </Box>

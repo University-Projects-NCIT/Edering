@@ -53,7 +53,7 @@
   >
     <!-- food categories list -->
     {#each foodCategories as category}
-      <a href="/menu?c_id={category.id}">
+      <a href="/menu?p_id={category.provider}">
         <Box
           className="bg-gray-primary rounded-3xl p-4 text-center hover:cursor-pointer food-category"
         >

@@ -17,5 +17,5 @@ export const calculateRating = (ratings: IRating[]) => {
     return calculatedRating;
   }
 
-  return Number(calculatedRating.toFixed(2));
+  return Math.trunc(calculatedRating);
 };

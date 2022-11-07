@@ -16,14 +16,14 @@
     <Box className="bg-gray-primary rounded-2xl p-4 ">
       <Box>
         <h3 class="text-sm font-medium mb-2">Address</h3>
-        <p class="text-xs">Mid-Baneshwor, Kathmandu</p>
+        <p class="text-xs">{restaurant.location}</p>
       </Box>
     </Box>
     <Box className="bg-gray-primary rounded-2xl p-4 ">
       <Box>
         <h3 class="text-sm font-medium mb-2">Timing</h3>
-        <p class="text-xs">Opening time: 10:00 AM</p>
-        <p class="text-xs">Closing time: 10:00 PM</p>
+        <p class="text-xs">Opening time: {restaurant.openTime}</p>
+        <p class="text-xs">Closing time: {restaurant.closeTime}</p>
       </Box>
     </Box>
     <Box className="bg-gray-primary rounded-2xl p-4 ">
