@@ -3,6 +3,7 @@ export enum RestaurantDetailTab {
   About = 'ABOUT',
   Chat = 'CHAT',
   Review = 'REVIEW',
+  QRcode = 'QRCODE',
 }
 
 export class restaurantDetailRoute {

@@ -83,7 +83,7 @@
   });
 </script>
 
-<Box className="pb-8 px-2 pt-5">
+<Box className="pb-16 px-2 pt-5">
   <Box>
     <h1
       class="text-base text-black-primary font-bold w-full flex justify-center"

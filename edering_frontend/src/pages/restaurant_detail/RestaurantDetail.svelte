@@ -14,9 +14,10 @@
   import type { IListOfResturants, IProvider } from 'types';
   import { userType, user_store } from 'store';
   import Review from './review/Review.svelte';
+  import QRcode from './qr_code/QRcode.svelte';
 
   $: restaurantId = $params?.restaurant_id;
-  $: activeTab = $params?.active_tab;
+  // $: activeTab = $params?.active_tab;
   let isLoading = true;
   let restaurant: IListOfResturants;
 
@@ -87,6 +88,9 @@
       </TabsMainPage>
       <TabsMainPage displayPage={RestaurantDetailTab.Review}>
         <Review />
+      </TabsMainPage>
+      <TabsMainPage displayPage={RestaurantDetailTab.QRcode}>
+        <QRcode />
       </TabsMainPage>
     </Box>
   </Box>

@@ -10,13 +10,14 @@
   import { userType } from 'store/usertype.store';
   import type { ICustomer, IProvider } from 'types';
   import Profile from '../../pages/profile/Profile.svelte';
-  import ProviderForm from '../login/components/ProviderForm.svelte';
   import { onMount } from 'svelte';
   import { getProvider, getCustomer } from '../../helper/dataRepository';
   import CustomerProfile from 'pages/profile/CustomerProfile.svelte';
   import ProviderProfile from 'pages/profile/ProviderProfile.svelte';
+  import ProviderForm from 'pages/provider/provider-form/ProviderForm.svelte';
 
   let showPrvForm = false;
+  let isLoading = false;
 
   const unsubscribe = authState(auth).subscribe(user => {
     if (user?.uid != null) {
@@ -51,8 +52,8 @@
     signInWithPopup(auth, googleProvider);
   }
 
-  function onEditProvider( ){
-    alert("Show Form called");
+  function onEditProvider() {
+    alert('Show Form called');
     showPrvForm = true;
   }
 
@@ -73,6 +74,7 @@
   }
 
   const updatePrv = async () => {
+    isLoading = true;
     const userId = $user_store.id;
     const prvUrl = `/providers/?id=${userId}`;
 
@@ -101,6 +103,7 @@
         }
       }
     });
+    isLoading = false;
   };
 
   const updateCst = async () => {
@@ -172,11 +175,11 @@
     </Box>
   {:else if $provider.id != '' && $userType == 'Provider'}
     <Box>
-      <ProviderProfile onLogout= {logout}/>
+      <ProviderProfile onLogout={logout} />
     </Box>
   {:else if showPrvForm}
     <Box>
-      <ProviderForm {updatePrv} />
+      <ProviderForm providerFormType="Add" {updatePrv} />
     </Box>
   {:else}
     <Box
@@ -184,7 +187,7 @@
     >
       <Box className="pt-8">
         <Box className="flex items-center justify-center mb-6 p-2">
-          <img class="py-4 px-2" src = {'/icons/Edering.png'} alt = "logo"/>
+          <img class="py-4 px-2" src={'/icons/Edering.png'} alt="logo" />
         </Box>
 
         <Box

@@ -3,4 +3,5 @@ export enum ApiRequestMethods {
   post = 'POST',
   put = 'PUT',
   delete = 'DELETE',
+  patch = 'PATCH',
 }

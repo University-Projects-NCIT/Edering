@@ -31,6 +31,6 @@ export const request = async <D>({
       return data;
     }
   } catch (e) {
-    alert(e);
+    // alert(e);
   }
 };

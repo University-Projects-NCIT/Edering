@@ -1,11 +1,68 @@
 <script lang="ts">
   import Box from 'components/layouts/Box.svelte';
-  import { providerForm } from 'store';
+  import { provider, providerForm, user_store } from 'store';
   import { storage } from 'config/conn_firebase';
+  import dayjs from 'dayjs';
+  import { ApiRequestMethods, IProvider } from 'types';
+  import { getProvider, request } from 'helper';
+  import { goto } from '@roxi/routify';
+  import BarLoading from 'components/loading/BarLoading.svelte';
 
   let avatar, fileinput;
 
+  export let providerFormType: 'Add' | 'Update' = 'Update';
+  export let isLoading = false;
+
   export let updatePrv = () => {};
+
+  let editPrv = async () => {
+    isLoading = true;
+    const userId = $user_store.id;
+    const prvUrl = `/providers/${userId}/`;
+
+    const updatedProvider: IProvider = {
+      id: userId,
+      name: $providerForm.name,
+      location: $providerForm.location,
+      image_id: $providerForm.image_id,
+      known_for: $providerForm.known_for,
+      open_time: $providerForm.open_time,
+      close_time: $providerForm.close_time,
+      created_at: `${Date.now()}`,
+    };
+
+    await request<IProvider>({
+      url: prvUrl,
+      method: ApiRequestMethods.patch,
+      data: updatedProvider,
+    }).then(data => {
+      if (Object.keys(data).length != 0) {
+        if (Object.keys(data).length != 0) {
+          getProvider(userId).then(data => {
+            provider.set(data);
+            isLoading = false;
+
+            // $goto(`/profile`);
+            window.history.back();
+          });
+        }
+      }
+    });
+  };
+
+  $: {
+    if ($provider.id) {
+      providerForm.update(store => ({
+        name: $provider.name ?? '',
+        known_for: $provider.known_for ?? '',
+        location: $provider.location ?? '',
+        open_time: $provider.open_time ?? '',
+        close_time: $provider.close_time ?? '',
+        image_id: $provider.image_id ?? '',
+        created_at: Number($provider.created_at),
+      }));
+    }
+  }
 
   const onSubmit = () => {
     switch (true) {
@@ -18,57 +75,64 @@
       case $providerForm.location == '':
         return alert("Location can't be empty");
     }
-    updatePrv();
+    console.log('update', $providerForm.close_time);
+    if (providerFormType === 'Update') {
+      editPrv();
+    } else {
+      updatePrv();
+    }
   };
 
   const onFileSelected = async e => {
     let image = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(image);
-    handleUploadImage(image,e.target.name)
-  }
-  
-  const handleUploadImage = async (file,name) => {
+    handleUploadImage(image, e.target.name);
+  };
+
+  const handleUploadImage = async (file, name) => {
     const imageSizeMB = file.size / 1024 / 1024;
-    
-    if (imageSizeMB > 3){
-      return alert(" File size can not be more than 3 MB. Please compress you image and upload again !");
+
+    if (imageSizeMB > 3) {
+      return alert(
+        ' File size can not be more than 3 MB. Please compress you image and upload again !'
+      );
     }
-     
+
     const image_name = file.name;
-    const timestamp = String(Math.round(new Date().getTime()/1000))
-    const uploadTask = storage.ref(`${name}/${timestamp+image_name}`).put(file);
-    let downloadableUrl: string = '' 
-    
+    const timestamp = String(Math.round(new Date().getTime() / 1000));
+    const uploadTask = storage
+      .ref(`${name}/${timestamp + image_name}`)
+      .put(file);
+    let downloadableUrl: string = '';
+
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       snapshot => {},
       error => {
         console.log(error);
       },
       () => {
         storage
-        .ref(name)
-        .child(timestamp + image_name)
-        .getDownloadURL()
-        .then(url => {
-          downloadableUrl = url 
-          console.log("downloadable url", url)
-          providerForm.set({
-          name: $providerForm.name,
-          location: $providerForm.location,
-          image_id: url,
-          known_for: $providerForm.known_for,
-          close_time: $providerForm.close_time,
-          open_time: $providerForm.open_time,
-          created_at: $providerForm.created_at
-        });
-      })
-    })
-
-
+          .ref(name)
+          .child(timestamp + image_name)
+          .getDownloadURL()
+          .then(url => {
+            downloadableUrl = url;
+            console.log('downloadable url', url);
+            providerForm.set({
+              name: $providerForm.name,
+              location: $providerForm.location,
+              image_id: url,
+              known_for: $providerForm.known_for,
+              close_time: $providerForm.close_time,
+              open_time: $providerForm.open_time,
+              created_at: $providerForm.created_at,
+            });
+          });
+      }
+    );
   };
-  
 </script>
 
 <Box>
@@ -78,9 +142,13 @@
     </div>
     <form on:submit|preventDefault={onSubmit} class="px-4 overflow-y-scroll">
       <Box className="pb-2">
-        <img class="w-20 h-20 rounded-md mb-2 m-auto" 
-          src={$providerForm.image_id != '' ? $providerForm.image_id : '/icons/default-image.jpg'}
-          alt = ""/>
+        <img
+          class="w-20 h-20 rounded-md mb-2 m-auto"
+          src={$providerForm.image_id != ''
+            ? $providerForm.image_id
+            : '/icons/default-image.jpg'}
+          alt=""
+        />
         <img
           class="upload w-10 h-10 m-auto"
           src="https://static.thenounproject.com/png/625182-200.png"
@@ -152,13 +220,15 @@
       />
 
       <div class="py-4" />
-      <button
-        type="submit"
-        class="w-full bg-sky-400 rounded text-white items-center justify-center py-2"
-        >Submit</button
-      >
+      <BarLoading {isLoading}>
+        <button
+          type="submit"
+          class="w-full bg-sky-400 rounded text-white items-center justify-center py-2"
+          >Submit</button
+        >
+      </BarLoading>
     </form>
-    <div class="h-16"></div>
+    <div class="h-16" />
   </div>
 </Box>
 
