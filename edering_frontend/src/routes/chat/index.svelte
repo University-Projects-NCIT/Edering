@@ -182,6 +182,11 @@
   const sendOrderMsg = () => {
     const date = Date.now();
     //TODO
+    db.collection(`db_messages`)
+      .doc(providerId)
+      .collection(`customers`)
+      .doc(customerId)
+      .set({ pid: providerId, type: 'new' });
     db.collection('db_messages')
       .doc(providerId)
       .collection('customers')
@@ -221,12 +226,12 @@
             <CustomerOrderMsg {msg} {providerId} {customerId} />
           {:else if msg?.sender == currentLogedUserId}
             <!-- //msg from current user , outgoing msg  -->
-            <Box className="px-4 py-1 w-5/6 float-left">
+            <Box className="px-4 py-1 w-5/6">
               <SendMsg {msg} />
             </Box>
           {:else}
             <!-- //incoming msg  -->
-            <Box className="px-4 py-1 w-5/6 float-right">
+            <Box className="px-4 py-1  w-full flex justify-end">
               <RecieveMsg {msg} />
             </Box>
           {/if}

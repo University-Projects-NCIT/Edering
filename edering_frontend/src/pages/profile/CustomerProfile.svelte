@@ -3,14 +3,11 @@
   import { customer } from 'store';
   import type { IOrder } from 'types';
   import dayjs from 'dayjs';
+  import { goto } from '@roxi/routify';
 
   export let onLogout = () => {};
 
   $: orders = $customer.customer_order ?? [];
-
-  const onClickHistory = () => {
-    //goto history
-  };
 </script>
 
 <Box className="flex flex-col h-screen">
@@ -44,8 +41,8 @@
     <Box
       flow="horizontal"
       justify="center"
-      onClick={onClickHistory}
       className="p-4 rounded-xl mt-8 w-full bg-gray-primary"
+      onClick={() => $goto('/history')}
     >
       <h1 class="text-md font-bold">Analyse History</h1>
     </Box>

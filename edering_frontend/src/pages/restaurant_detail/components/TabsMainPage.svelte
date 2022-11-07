@@ -3,9 +3,10 @@
   import { RestaurantDetailTab } from '../restaurantRoute';
 
   export let displayPage: RestaurantDetailTab = RestaurantDetailTab.Menu;
-  $: activeTab = $params?.active_tab as string;
+  $: activeTab = $params?.active_tab ?? RestaurantDetailTab.Menu;
+  $: console.log('active', activeTab);
 </script>
 
-{#if activeTab.toUpperCase() === displayPage}
+{#if activeTab?.toUpperCase() === displayPage}
   <slot />
 {/if}

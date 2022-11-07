@@ -2,6 +2,7 @@
   import { goto, params } from '@roxi/routify';
   import Box from 'components/layouts/Box.svelte';
   import { capitalizeFirstLetter } from 'helper';
+  import RestaurantDetail from '../RestaurantDetail.svelte';
   import {
     restaurantDetailRoute,
     RestaurantDetailTab,
@@ -12,9 +13,10 @@
     RestaurantDetailTab.About,
     RestaurantDetailTab.Chat,
     RestaurantDetailTab.Review,
+    RestaurantDetailTab.QRcode,
   ];
 
-  $: activeTab = $params?.active_tab as string;
+  $: activeTab = $params?.active_tab ?? (RestaurantDetailTab.Menu as string);
   $: restaurantId = $params?.restaurant_id;
 
   const handleTabClick = tab => {
@@ -22,7 +24,12 @@
   };
 </script>
 
-<Box flow="horizontal" align="center" justify="between">
+<Box
+  flow="horizontal"
+  className="space-x-3 overflow-x-auto"
+  align="center"
+  justify="between"
+>
   {#each navItems as item}
     <Box
       onClick={() => handleTabClick(item)}

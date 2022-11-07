@@ -3,10 +3,12 @@
   import { LoadingUI } from 'components';
   import Box from 'components/layouts/Box.svelte';
   import { request } from 'helper';
+  import { userType } from 'store';
   import { cartStore } from 'store/cart/cart.store';
   import { onMount } from 'svelte';
   import { ApiRequestMethods, IFoodCategory } from 'types';
   import type { IMenu } from 'types/menu.types';
+  import type { UserType } from 'types/UserType';
   import Item from './components/Item.svelte';
 
   $: pId = $params?.p_id;
@@ -14,6 +16,8 @@
   let isLoading = false;
   let foodCategory: IFoodCategory;
   let menus: IMenu[] = [];
+  let whoIsUser: UserType;
+  $: whoIsUser = $userType;
 
   $: isCartContainsItem = $cartStore.cartItems.length > 0;
   $: isCartContainsItem
@@ -21,6 +25,10 @@
     : (isItemAddedToCart = false);
 
   onMount(async () => {
+    await getMenu();
+  });
+
+  const getMenu = async () => {
     if (!pId) {
       return;
     }
@@ -34,9 +42,25 @@
       foodCategory = response[0];
       if (foodCategory.menus?.length ?? 0 > 0) {
         menus = foodCategory.menus ?? [];
+      } else {
+        menus = [];
       }
     }
-  });
+  };
+
+  let isRemovingMenu = false;
+
+  const handleRemoveMenu = async menuId => {
+    //remove
+
+    isRemovingMenu = true;
+    const response: IMenu = await request({
+      url: `/menus/${menuId}`,
+      method: ApiRequestMethods.delete,
+    });
+    await getMenu();
+    isRemovingMenu = false;
+  };
 
   const handleClickOnCart = () => {
     $goto(`/cart?p_id=${pId}`);
@@ -63,13 +87,24 @@
       {/if}
     </Box>
   </Box>
-  {#if isLoading}
+  <Box>
+    {#if whoIsUser == 'Provider'}
+      <Box>
+        <a
+          style="text-decoration: underline;"
+          class="hover:text-yellow-primary text-black-primary text-xs"
+          href={`/add-menu?cId=${foodCategory?.id}`}>Add Menu</a
+        >
+      </Box>
+    {/if}
+  </Box>
+  {#if isLoading || isRemovingMenu}
     <LoadingUI />
   {:else if menus.length > 0}
     <Box className="">
       <Box className="space-y-2">
         {#each menus as item}
-          <Item {item} />
+          <Item {handleRemoveMenu} {item} />
         {/each}
       </Box>
     </Box>

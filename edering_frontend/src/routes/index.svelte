@@ -1,5 +1,11 @@
 <script lang="ts">
   import { goto } from '@roxi/routify';
+  import {
+    restaurantDetailRoute,
+    RestaurantDetailTab,
+  } from 'pages/restaurant_detail/restaurantRoute';
+  import { userType, user_store } from 'store';
+  import { onMount } from 'svelte/types/runtime/internal/lifecycle';
 
   // import HomePage from 'pages/home/Home.svelte';
 

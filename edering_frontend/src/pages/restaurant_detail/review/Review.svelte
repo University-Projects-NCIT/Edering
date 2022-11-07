@@ -8,7 +8,7 @@
   import { request } from 'helper';
   import { onMount } from 'svelte';
   import { ApiRequestMethods, IComment, IRating } from 'types';
-  import { user_store } from 'store';
+  import { userType, user_store } from 'store';
   import StarRating from 'svelte-star-rating';
   import BarLoading from 'components/loading/BarLoading.svelte';
 
@@ -174,22 +174,25 @@
 {:else}
   <Box className="pb-8 px-2 pt-3">
     <form on:submit|preventDefault={() => {}}>
-      <textarea
-        bind:value={reviewInput}
-        class="bg-gray-primary h-16 text-sm  text-black-primary px-3 py-1 w-full  border-0 focus:placeholder-transparent focus:outline-none focus:ring-transparent"
-        name="review"
-        placeholder="Review here..."
-      />
-      <Box flow="horizontal" justify="end" className="pt-1">
-        <Button
-          on:click={() => {
-            display = true;
-          }}
-          size="small"
-          type="filled"
-          buttonEventType="submit">Add Rating</Button
-        >
-      </Box>
+      {#if $userType === 'Customer'}
+        <textarea
+          bind:value={reviewInput}
+          class="bg-gray-primary h-16 text-sm  text-black-primary px-3 py-1 w-full  border-0 focus:placeholder-transparent focus:outline-none focus:ring-transparent"
+          name="review"
+          placeholder="Review here..."
+        />
+        <Box flow="horizontal" justify="end" className="pt-1">
+          <Button
+            on:click={() => {
+              display = true;
+            }}
+            size="small"
+            type="filled"
+            buttonEventType="submit">Add Rating</Button
+          >
+        </Box>
+      {/if}
+
       {#if ratingWithReviewData.length > 0}
         {#each ratingWithReviewData as data}
           <Box
