@@ -51,6 +51,11 @@
     signInWithPopup(auth, googleProvider);
   }
 
+  function onEditProvider( ){
+    alert("Show Form called");
+    showPrvForm = true;
+  }
+
   function logout() {
     auth.signOut();
     customer.set({ id: '' });
@@ -167,7 +172,7 @@
     </Box>
   {:else if $provider.id != '' && $userType == 'Provider'}
     <Box>
-      <ProviderProfile onLogout= {logout} onEditProvider={() => showPrvForm = true }/>
+      <ProviderProfile onLogout= {logout}/>
     </Box>
   {:else if showPrvForm}
     <Box>
